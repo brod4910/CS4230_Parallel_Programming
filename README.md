@@ -202,3 +202,14 @@ Hello from thread 6 of 8
 Hello from thread 2 of 8
 Hello from thread 7 of 8
 ```
+
+## TODO FOR TA's
+
+- Show how to write a simple script in Python that produces a simple 
+  scaling curve for an OpenMP Pi calculation, 
+  and dumps answers to a graph 
+  that is included in a simple webpage.
+
+
+
+
