@@ -116,3 +116,59 @@ Hello from thread 3 of 8
 Hello from thread 7 of 8
 Hello from thread 0 of 8
 ```
+
+## OPEN MP
+
+### DOWNLOAD, INSTALL
+
+Its build it
+
+### COMPILE
+
+
+
+### RUN
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
