@@ -84,5 +84,35 @@ Execute you parallel application
 3.14159
 ```
 
-
 ## POSIX THREAD
+
+### No need to download or install
+
+```$ cd CS_4230/```
+
+```$ cd pthread/```
+
+### COMPILE
+
+Your pthread code as SRC
+
+```$ make SRC=pt_hello_world compile```
+
+### EXECUTE
+
+Your pthread code with THREAD
+
+```$ make SRC=pt_hello_world THREADS=8 run```
+
+```
+./pt_hello_world.exe 8
+Hello from thread 1 of 8
+Hello from thread 6 of 8
+Hello from the main thread
+Hello from thread 2 of 8
+Hello from thread 4 of 8
+Hello from thread 5 of 8
+Hello from thread 3 of 8
+Hello from thread 7 of 8
+Hello from thread 0 of 8
+```
