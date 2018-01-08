@@ -1,7 +1,10 @@
+
 .PHONY: build check help clean superclean
+
 help:
 	@echo "Makefile for CS 4230 Parallel Programming Course"
 	@echo "   help       print this help documentation and exit"
+	@echo "   library supported --> tbb | pthread | omp | pasl | cuda | mpi  "
 	@echo "   download   fetch   the library as per option"
 	@echo "   install    install the library as per option"
 	@echo "   compile    build the source files as per SRC"
