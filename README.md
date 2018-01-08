@@ -6,8 +6,10 @@ They typing ```cade``` in you terminal will do the following
 
 ## CADE Login
 
+
+```$ cade```
+
 ```
-$ cade
 Last login: Sun Jan  7 22:01:32 2018 from school.uconnect.utah.edu
 
 #################################################
@@ -28,9 +30,12 @@ change directory into CS_4230
 
 Set up the ENVIRONMENT
 
+
+```$ source dotcshrc```
+
+```$ echo $TBB_HOME```
+
 ```
-$ source dotcshrc 
-$ echo $TBB_HOME 
 /home/vinuj/CS_4230/tbb
 ```
 
@@ -38,8 +43,10 @@ $ echo $TBB_HOME
 
 Download the necessary libraries
 
+
+```$ make library=tbb download```
+
 ```
-$ make library=tbb download
 git clone https://github.com/01org/tbb.git
 Cloning into 'tbb'...
 remote: Counting objects: 9825, done.
@@ -52,33 +59,27 @@ Resolving deltas: 100% (8046/8046), done.
 
 Install the necessary libraries
 
-```
-$ make library=tbb install
-```
+```$ make library=tbb install```
 
 ### YOUR TBB BASED PARALLEL CODE
 
 Write you parallel application
 
-```
-$ cd src_tbb/
-```
+```$ cd src_tbb/```
 
 ### COMPILE IT
 
 Build you application
 
-```
-make SRC=tbb_hello_world compile
-```
+```make SRC=tbb_hello_world compile```
  
 ### RUN IT
 
 Execute you parallel application
 
+```$ make SRC=tbb_hello_world run```
+
 ```
-$ make SRC=tbb_hello_world run
 ./tbb_hello_world.exe 
 3.14159
 ```
-
