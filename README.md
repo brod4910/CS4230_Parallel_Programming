@@ -117,6 +117,52 @@ Hello from thread 7 of 8
 Hello from thread 0 of 8
 ```
 
+## THREAD SANITIZER
+
+### DOWNLOAD, INSTALL
+
+Not necessary of CADE
+
+TODO: Add Pre-Requisites for Personal Machines
+
+```cd CS_4230/tsan/```
+
+### COMPILE
+
+```$ make SRC=simple_race compile```
+
+gcc-7.2 -o simple_race.exe -fsanitize=thread -static-libtsan simple_race.c
+
+### RUN DATA RACE CHECKING
+
+```$ make SRC=simple_race run```
+
+```
+./simple_race.exe 8
+==================
+WARNING: ThreadSanitizer: data race (pid=10755)
+  Read of size 4 at 0x000001498888 by thread T2:
+    #0 Thread2 <null> (simple_race.exe+0x00000048c3c8)
+
+  Previous write of size 4 at 0x000001498888 by thread T1:
+    #0 Thread1 <null> (simple_race.exe+0x00000048c38b)
+
+  Location is global 'Global' of size 4 at 0x000001498888 (simple_race.exe+0x000001498888)
+
+  Thread T2 (tid=10758, running) created by main thread at:
+    #0 pthread_create ../../.././libsanitizer/tsan/tsan_interceptors.cc:900 (simple_race.exe+0x00000040c760)
+    #1 main <null> (simple_race.exe+0x00000048c444)
+
+  Thread T1 (tid=10757, finished) created by main thread at:
+    #0 pthread_create ../../.././libsanitizer/tsan/tsan_interceptors.cc:900 (simple_race.exe+0x00000040c760)
+    #1 main <null> (simple_race.exe+0x00000048c425)
+
+SUMMARY: ThreadSanitizer: data race (/home/vinuj/CS_4230/tsan/simple_race.exe+0x48c3c8) in Thread2
+==================
+ThreadSanitizer: reported 1 warnings
+```
+
+
 ## OPEN MP
 
 ### DOWNLOAD, INSTALL
