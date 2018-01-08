@@ -167,54 +167,33 @@ ThreadSanitizer: reported 1 warnings
 
 ### DOWNLOAD, INSTALL
 
-Its build it
+Its already part of all major distributions,
+Please contact TA's if you have any problems
+
+### WORKING DIR
+
+```cd CS_4230/omp/```
 
 ### COMPILE
 
+```$ make SRC=omp_hello_world compile```
 
+```
+gcc -g -Wall  -fopenmp -o omp_hello_world.exe omp_hello_world.c
+```
 
 ### RUN
 
+```make SRC=omp_hello_world run```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
+./omp_hello_world.exe 8
+Hello from thread 0 of 8
+Hello from thread 3 of 8
+Hello from thread 1 of 8
+Hello from thread 5 of 8
+Hello from thread 4 of 8
+Hello from thread 6 of 8
+Hello from thread 2 of 8
+Hello from thread 7 of 8
+```
