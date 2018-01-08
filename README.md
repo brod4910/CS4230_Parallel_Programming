@@ -6,7 +6,6 @@ They typing ```cade``` in you terminal will do the following
 
 ## CADE Login
 
-
 ```$ cade```
 
 ```
@@ -24,7 +23,6 @@ $ cd CS_4230/
 
 As shown above, the first thing to do is to change from tcsh to bash and 
 change directory into CS_4230
-
 
 ## Threading Building Blocks
 
@@ -61,11 +59,11 @@ Install the necessary libraries
 
 ```$ make library=tbb install```
 
-### YOUR TBB BASED PARALLEL CODE
-
-Write you parallel application
+### WORKING DIRECTORY
 
 ```$ cd src_tbb/```
+
+Develop your tbb based parallel code
 
 ### COMPILE IT
 
@@ -86,11 +84,17 @@ Execute you parallel application
 
 ## POSIX THREAD
 
-### No need to download or install
+### DOWNLOAD, INSTALL
+
+Not necessary
+
+### WORKING DIRECTORY
 
 ```$ cd CS_4230/```
 
 ```$ cd pthread/```
+
+Develop your pthread based parallel code
 
 ### COMPILE
 
@@ -121,7 +125,7 @@ Hello from thread 0 of 8
 
 ### DOWNLOAD, INSTALL
 
-Not necessary of CADE
+Not necessary on CADE
 
 TODO: Add Pre-Requisites for Personal Machines
 
@@ -162,7 +166,6 @@ SUMMARY: ThreadSanitizer: data race (/home/vinuj/CS_4230/tsan/simple_race.exe+0x
 ThreadSanitizer: reported 1 warnings
 ```
 
-
 ## OPEN MP
 
 ### DOWNLOAD, INSTALL
@@ -173,6 +176,8 @@ Please contact TA's if you have any problems
 ### WORKING DIR
 
 ```cd CS_4230/omp/```
+
+Develop your Open MP based code here.
 
 ### COMPILE
 
