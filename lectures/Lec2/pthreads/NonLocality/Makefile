@@ -64,6 +64,12 @@ decompile:
 	@echo "De-Compiling..."
 	@objdump -S $(SRC).exe > $(SRC).decompile
 
+run:
+	./$(SRC).exe
+
 help:
 	@echo "Makefile for q1"
 	@echo " help print this documentation and exit"
+	@echo " compile"
+	@echo " decompile"
+	@echo " run"

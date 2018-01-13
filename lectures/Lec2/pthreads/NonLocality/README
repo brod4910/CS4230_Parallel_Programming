@@ -1,13 +1,23 @@
 This illustrates good and bad locality of sequential code.
 
+# Compile-Decompile
+
+$ make all SRC=badLoc
+$ make all SRC=goodLoc
+
 # Compile
 
-$ make SRC=badLoc compile
-$ make SRC=goodLoc compile
+$ make compile SRC=badLoc
+$ make compile SRC=goodLoc
 
-# Run
+# De-Compile
 
-./goodLoc
-./badLoc
+$ make decompile SRC=badLoc
+$ make decompile SRC=goodLoc
+
+# Only Run
+
+$ make run SRC=badLoc
+$ make run SRC=goodLoc
 
 Now answer the question asked in the homework.
