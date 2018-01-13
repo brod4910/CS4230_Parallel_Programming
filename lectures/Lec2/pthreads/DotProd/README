@@ -1,0 +1,22 @@
+This directory contains the skeleton of a dot product routine. It only goes so
+far as to divide work and degenerate to a serial dot-product when a certain threshold
+is reached. Also the dot-product itself is not done : The "C" array gets A[i] * B[i]
+but I don't accumulate the "C" array itself.
+
+Your task will be described in the assignment description.
+
+Background info:
+
+1) This is a good overview of how PThreads are managed: 
+     https://courses.engr.illinois.edu/cs241/fa2010/ppt/10-pthread-examples.pdf
+
+2) These notes may also help : Lec3-cs4230.pdf found at URL http://www.eng.utah.edu/~cs4230/
+
+   Look at bPc.c which contains an actual usage of how PThread arguments are passed
+   and results are collected.
+
+   For your assignment, you will merely pass in one struct, and so the solution used
+   in bPc.c should work without too much modification.
+
+
+

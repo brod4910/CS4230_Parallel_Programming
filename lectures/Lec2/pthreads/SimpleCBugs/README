@@ -1,0 +1,18 @@
+One often begins coding up a new parallel program by first
+writing a stub that may have a serial algorithm implemented,
+and then embarking on a parallel version. The parallel version
+itself may call the serial version if the calculations are
+not worth parallelizing.
+
+Ganesh began writing a simple Dot Product routine PThreadDP.c.
+In the process, he created two prior variants
+PThreadDPBuggy.c and PThreadDPLeak.c. The former crashed
+nondeterministically, proving that testing is insufficient to
+find out issues (it is always hit or miss). The second exited
+silently due to a memory leak (not significant for this example,
+but in general, such forgotten deallocations may be an issue).
+
+Both these maladies were spotted by running the AddressSanitizer,
+as the included files "asan-output-overlap.txt" and "asan-output-leak.txt"
+show.
+

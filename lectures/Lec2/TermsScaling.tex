@@ -1,0 +1,372 @@
+\documentclass{beamer}
+%
+% Choose how your presentation looks.
+%
+% For more themes, color themes and font themes, see:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+%
+\mode<presentation>
+{
+  \usetheme{default}      % or try Darmstadt, Madrid, Warsaw, ...
+  \usecolortheme{default} % or try albatross, beaver, crane, ...
+  \usefonttheme{default}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+} 
+
+\usepackage{alltt}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+
+\title[]{CS 4230, Parallel Computing\\
+   Basic Terminology, \\
+   Scaling Laws}
+\author{Ganesh Gopalakrishnan}
+\institute{School of Computing, Univ of Utah}
+\date{Jan 10, 2017}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Uncomment these lines for an automatically generated outline.
+%\begin{frame}{Outline}
+%  \tableofcontents
+%\end{frame}
+
+%===
+
+
+
+
+%===
+
+\begin{frame}{The world of computing has changed}
+
+\noindent Complexity
+\begin{itemize}
+\item Power dissipation is a first-rate concern
+  \begin{itemize}
+  \item Packaging costs, cooling, fan
+  \end{itemize}
+\item Energy bills add up in large-scale installations
+  \begin{itemize}
+  \item ``Race to finish'' (compute fast, idle) reduces energy, time
+  \end{itemize}
+\item Data movement costs energy
+\item One can compute thousands of CPU operations 
+  with the same energy one spends moving data even a short distance
+\item Chip dimensions are approaching 2cm
+\item Light travels 30cm in one nano second in vacuum
+  \begin{itemize}
+  \item clock period is 0.25 nS, so travels 7.5 cm in one clock period
+    in vacuum
+  \item far less on chip
+    \begin{itemize}
+    \item communication costs time and energy
+    \item communication delays force locality (computations that  
+  finish in one clock period must be localized)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+ 
+\end{frame}
+
+
+%===
+
+\begin{frame}{CPU chips are a miracle of engineering}
+
+\noindent One of the most astounding of human creations
+\begin{itemize}
+\item Thumb-nail sized
+\item Yet, companies with 100K engineers designs these
+  thumbnails
+\item CPU chips contain several billion transistors
+\item More per humans on the planet
+\end{itemize}
+ 
+\end{frame}
+
+
+%===
+
+\begin{frame}{There is a lot of parallelism inside chips}
+
+\noindent Parallelism
+\begin{itemize}
+\item The success of computing rests on the amount of
+  parallelism we can hide (tuck inside) chips
+\item Batches of instructions are picked up and executed
+\item Memory subsystems, networks, etc are all 
+  engaged in fervent activity in parallel
+\end{itemize}
+ 
+\end{frame}
+
+
+%===
+
+\begin{frame}{Caches are hugely important}
+
+\noindent Locality!
+\begin{itemize}
+\item Access to registers and TLB : ``instantaneous''
+\item L1 cache : almost CPU cycles
+\item Other caches : many cycles
+\item Main memory : huge latency
+\item Much of a CPU today is cache
+\end{itemize}
+ 
+\end{frame}
+
+
+%===
+
+%===
+
+\begin{frame}{Chip photos from slide deck Lec1}
+
+See EnergyNomenclature.pdf
+
+\end{frame}
+
+
+\begin{frame}{Compilers are Crucial to Efficiency}
+
+\noindent Programs mapped to machine code
+\begin{itemize}
+\item User programs must express intent
+\item Over-expressing (e.g. for loops with fixed order)
+  ``confuse'' compilers
+\item Language constructs such as ``forall'' are
+  \begin{itemize}
+  \item good for the user (clearer intent)
+  \item good for the compiler (more parallel code)
+  \end{itemize}
+\end{itemize}
+ 
+\end{frame}
+
+
+%===
+
+\begin{frame}{Operating Systems are Crucially Important too}
+
+\noindent Role of OS
+\begin{itemize}
+\item Provide mechanisms to create processes and threads
+\item Allocate memory spaces for processes, threads
+  \begin{itemize}
+  \item Stack sizes
+  \item Handle exceptions thrown
+  \item Allocate, deallocate memory
+  \item Handle scheduling decisions
+  \end{itemize}
+\end{itemize}
+ 
+\end{frame}
+
+
+%===
+
+\begin{frame}{Processes, Threads, Tasks}
+
+\noindent Some basics
+\begin{itemize}
+\item Processes : isolated memory
+\item Threads : shared memory
+  \begin{itemize}
+  \item Multiple within a process
+  \end{itemize}
+\item Tasks : work capability or simply ``work''
+  \begin{itemize}
+  \item Bind to threads when available
+  \end{itemize}
+\item One way to ensure load balancing: {\em work stealing}
+  \begin{itemize}
+  \item Pioneered in Cilk
+  \item Now standard in all advanced runtimes
+    \begin{itemize}
+    \item TBB supports it
+    \item OMP (OpenMP) will soon
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+ 
+\end{frame}
+
+
+%===
+
+\begin{frame}{Hardware Hierarchy}
+
+\noindent The hierarchy of hardware
+\begin{itemize}
+\item Motherboard contain sockets (cavities)
+\item Sockets house CPU multicore chips 
+\item Multicore chips house cores
+\item Each core may support more than one hardware thread
+  (SMT)
+\item Software threads bind to hardware threads
+\end{itemize}
+
+\noindent See Jernej Babic's slides mentioned in Reading1.pdf
+ 
+\end{frame}
+
+
+%===
+
+\begin{frame}{Simplifying things a bit}
+
+\noindent For now, we discuss all the things happening within
+one process
+\begin{itemize}
+\item That is, a bunch of shared memory threads
+\item These threads ideally run on separate HW threads (or cores)
+  \begin{itemize}
+  \item Non-ideal to run more than one software thread on one core,
+    although you can time-multiplex and do so
+  \end{itemize}
+\end{itemize}
+ 
+\end{frame}
+
+
+%===
+
+\begin{frame}{Will adding more ``processors'' (parallel computing
+capability) always speed things up?}
+
+\noindent Two ideas exist in this space:
+\begin{itemize}
+\item Strong scaling: Yes, as we add processors, we get faster
+\item Weak scaling: No, but if we also grow the problem size proportional
+        to the \# processors
+        ({\em the same problem-size per processor})
+        we will solve bigger problems over
+        the same amount of time 
+
+
+\item When can we expect such scaling behaviors?
+    \begin{itemize}
+      \item Strong: Achieve this only if the serial part is small in overhead
+        (so with serialization bottlenecks (e.g., bad locks),
+          we won't get this)
+          \begin{itemize}
+          \item This is known as Amdahl's law
+          \end{itemize}
+      
+      \item Weak: Achieve this only if the communication among the processors
+          grows slowly
+          \begin{itemize}
+          \item This is known as Gustafson-Barsis's law
+          \end{itemize}
+    \end{itemize}
+
+\end{itemize}
+ 
+\end{frame}
+
+%===
+
+\begin{frame}{Amdahl's Law}
+
+  \begin{itemize}
+  \item Two helpful terms:
+    \begin{itemize}
+    \item Speedup: $s = \frac{T_{serial}}{T_{parallel}}$
+    \item Parallel efficiency: $s/p$ ($=1$ for $s=p$)
+    \end{itemize}
+  \item Let a program have a fraction $0\leq k\leq 1$  be non-parallelizable
+  \item If the program takes runtime $T$, 
+    \begin{itemize}
+    \item it takes $T\cdot k$ for the serial part
+    \item and $T\cdot (1-k)$ for the parallel part
+    \end{itemize}
+  \item If we put $P$ processors to ``grind away'' the parallel part,
+    \begin{itemize}
+    \item the total time becomes $T\cdot k + \frac{T\cdot (1-k)}{P}$
+    \item the speedup is now $\frac{T}{T\cdot (k + \frac{(1-k)}{P})}$
+    \item which simplifies to $\frac{P}{1+k\cdot(P-1)}$
+    \item Now, $\displaystyle{\lim_{P \to \infty}}\;\; \frac{P}{1+k\cdot(P-1)} = \frac{1}{k}$
+    \item Thus, with $k=0.1$, we get only $10\times$ speedup
+    \end{itemize}
+  \end{itemize}
+
+\end{frame}
+
+
+%===
+
+\begin{frame}{Depiction of Amdahl's Law from Reinders' Book}
+
+
+
+\end{frame}
+
+%===
+
+\begin{frame}{Depiction of Gustafson-Barsis Law from Reinders' Book}
+
+
+\end{frame}
+
+
+%===
+
+\begin{frame}{Depiction of Data Parallelism (Reinders)}
+
+
+\end{frame}
+
+
+%===
+
+\begin{frame}{Depiction of Task Parallelism (Reinders)}
+
+
+\end{frame}
+
+
+%===
+
+\begin{frame}{Depiction of Pipelining Parallelism (Reinders)}
+
+
+\end{frame}
+
+
+%===
+
+\begin{frame}{Depiction of Mixed Solutions (Reinders)}
+
+
+\end{frame}
+
+
+%===
+
+
+\begin{frame}{Depiction of Hybrid Pipelining / Data Parallel (Reinders)}
+\noindent Helps eliminate pipelining bottlenecks
+
+\end{frame}
+
+
+%===
+
+\begin{frame}{The Importance of Parallel Programming Patterns}
+\noindent Much like the advent of structured parallel programming
+
+\end{frame}
+
+
+%===
+
+
+
+\end{document}

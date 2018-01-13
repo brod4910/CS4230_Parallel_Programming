@@ -1,0 +1,29 @@
+ganesh@fractus:~/cs4230/pthreads$ 
+ganesh@fractus:~/cs4230/pthreads$ clang -fsanitize=address -lpthread -lm PThreadDP.c
+ganesh@fractus:~/cs4230/pthreads$ ./a.out
+Please provide Exp for array sizes and threshold sep by a comma
+3,8
+Will do DP of 8 sized arrays
+Filling arrays now
+Serial dot product is 32034
+Now invoking parallel dot product
+i,A[],B[],C[],Thres,L,H = 0,57,45,0,8,0,8
+i,A[],B[],C[],Thres,L,H = 1,127,3,0,8,0,8
+i,A[],B[],C[],Thres,L,H = 2,31,15,0,8,0,8
+i,A[],B[],C[],Thres,L,H = 3,113,103,0,8,0,8
+i,A[],B[],C[],Thres,L,H = 4,121,55,0,8,0,8
+i,A[],B[],C[],Thres,L,H = 5,57,93,0,8,0,8
+i,A[],B[],C[],Thres,L,H = 6,19,8,0,8,0,8
+i,A[],B[],C[],Thres,L,H = 7,46,106,0,8,0,8
+Parallel DP = -1
+
+=================================================================
+==4792==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 32 byte(s) in 1 object(s) allocated from:
+    #0 0x4b8738  (/home/ganesh/cs4230/pthreads/a.out+0x4b8738)
+    #1 0x4e9fbb  (/home/ganesh/cs4230/pthreads/a.out+0x4e9fbb)
+    #2 0x7ff4b7f7d82f  (/lib/x86_64-linux-gnu/libc.so.6+0x2082f)
+
+SUMMARY: AddressSanitizer: 32 byte(s) leaked in 1 allocation(s).
+ganesh@fractus:~/cs4230/pthreads$

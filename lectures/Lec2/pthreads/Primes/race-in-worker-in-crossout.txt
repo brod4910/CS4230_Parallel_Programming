@@ -1,0 +1,61 @@
+
+  620  clang iP.c -lpthread -lm -fsanitize=thread -o iPr
+  621  h
+ganesh@fractus:~/cs4230/pthreads/Primes$ ./iPr 100000 4 3
+==================
+WARNING: ThreadSanitizer: data race (pid=5124)
+  Write of size 4 at 0x0000014acefc by thread T2:
+    #0 crossout <null> (iPr+0x0000004a2032)
+    #1 worker <null> (iPr+0x0000004a214b)
+
+  Previous write of size 4 at 0x0000014acefc by thread T1:
+    #0 crossout <null> (iPr+0x0000004a2032)
+    #1 worker <null> (iPr+0x0000004a214b)
+
+  Location is global '<null>' at 0x000000000000 (iPr+0x0000014acefc)
+
+  Thread T2 (tid=5127, running) created by main thread at:
+    #0 pthread_create <null> (iPr+0x0000004222c6)
+    #1 main <null> (iPr+0x0000004a245a)
+
+  Thread T1 (tid=5126, running) created by main thread at:
+    #0 pthread_create <null> (iPr+0x0000004222c6)
+    #1 main <null> (iPr+0x0000004a245a)
+
+SUMMARY: ThreadSanitizer: data race (/home/ganesh/cs4230/pthreads/Primes/iPr+0x4a2032) in crossout
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=5124)
+  Read of size 4 at 0x0000014acec4 by thread T1:
+    #0 worker <null> (iPr+0x0000004a212e)
+
+  Previous write of size 4 at 0x0000014acec4 by thread T2:
+    #0 crossout <null> (iPr+0x0000004a2032)
+    #1 worker <null> (iPr+0x0000004a214b)
+
+  Location is global '<null>' at 0x000000000000 (iPr+0x0000014acec4)
+
+  Thread T1 (tid=5126, running) created by main thread at:
+    #0 pthread_create <null> (iPr+0x0000004222c6)
+    #1 main <null> (iPr+0x0000004a245a)
+
+  Thread T2 (tid=5127, running) created by main thread at:
+    #0 pthread_create <null> (iPr+0x0000004222c6)
+    #1 main <null> (iPr+0x0000004a245a)
+
+SUMMARY: ThreadSanitizer: data race (/home/ganesh/cs4230/pthreads/Primes/iPr+0x4a212e) in worker
+==================
+49 values of base done
+1 values of base done
+1 values of base done
+1 values of base done
+1 values of base done
+1 values of base done
+13 values of base done
+13 values of base done
+13 values of base done
+13 values of base done
+
+the number of primes found was 9592
+ThreadSanitizer: reported 2 warnings
+ganesh@fractus:~/cs4230/pthreads/Primes$

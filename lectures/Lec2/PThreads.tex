@@ -1,0 +1,111 @@
+\documentclass{beamer}
+%
+% Choose how your presentation looks.
+%
+% For more themes, color themes and font themes, see:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+%
+\mode<presentation>
+{
+  \usetheme{default}      % or try Darmstadt, Madrid, Warsaw, ...
+  \usecolortheme{default} % or try albatross, beaver, crane, ...
+  \usefonttheme{default}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+} 
+
+\usepackage{alltt}
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+
+\title[]{CS 4230, Parallel Computing\\
+   PThreads}
+\author{Ganesh Gopalakrishnan}
+\institute{School of Computing, Univ of Utah}
+\date{Jan 10, 2017}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Uncomment these lines for an automatically generated outline.
+%\begin{frame}{Outline}
+%  \tableofcontents
+%\end{frame}
+
+%===
+
+%===
+
+\begin{frame}{PThreads}
+
+\noindent We will study the main ideas from the LLNL Pthreads tutorial
+
+\noindent You must also begin reading from Pacheco's book
+\begin{itemize}
+\item Creating threads
+\item Passing arguments to them
+\item Collecting answers
+\item Holding onto locks
+\item Implementing monitors
+\end{itemize}
+ 
+\end{frame}
+
+%===
+
+\begin{frame}[fragile]{PThread Nomenclature}
+
+\begin{itemize}
+\item \verb|pthread_|
+  \begin{itemize}
+  \item \verb|pthread_create|
+  \item \verb|pthread_exit|
+  \item ...
+  \end{itemize}
+\item \verb|pthread_attr_|
+  \begin{itemize}
+  \item \verb|pthread_attr_init|
+  \end{itemize}
+\item \verb|pthread_mutex_|
+  \begin{itemize}
+  \item \verb|pthread_mutex_init_|
+  \item \verb|pthread_mutex_destroy_|
+  \end{itemize}
+\item \verb|pthread_cond_|
+  \begin{itemize}
+  \item \verb|pthread_cond_wait|
+  \item \verb|pthread_cond_signal|
+  \item \verb|pthread_cond_signal|
+  \end{itemize}
+\item \verb|pthread_barrier_|
+\item \verb|pthread_rwlock_|
+\end{itemize}
+ 
+\end{frame}
+
+%===
+
+\begin{frame}[fragile]{Check your code before parallelizing!}
+
+  \begin{itemize}
+  \item Commonsense suggests that you parallelize only non-buggy code
+  \item Commonsense suggests that you parallelize only that code
+    where all obvious inefficiencies have been removed
+  \item Yet, we will now show that many a bug lurk in C codes
+  \item We will introduce you to these tools:
+    \begin{itemize}
+    \item AddressSanitizer
+    \item ThreadSanitizer
+    \end{itemize}
+  \end{itemize}
+  
+\end{frame}
+
+
+%==
+
+
+\end{document}

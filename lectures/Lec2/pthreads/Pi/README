@@ -1,0 +1,20 @@
+This directory contains the pi approximation calculation
+from Peter S. Pacheco's book "An Introduction to Parallel Programming,"
+Chapter 4. The examples were kindly provided by the author at his website
+http://www.cs.usfca.edu/~peter/.
+
+Notable are these results:
+
+1) Both busy-wait solutions presented in the book, namely pth_pi_busy1.c and
+   pth_pi_busy2.c, despite being so well written, have data races.
+
+   See "busy1-data-race.txt" and "busy2-data-race.txt" for how ThreadSanitizer
+   was run to detect these races, and the race report itself.
+   
+   While once upon a time it was "OK" to write code with data races, things have
+   meanwhile changed a lot. The C language standardization effort tells us that
+   there is no such thing as a "benign race." 
+
+2) The routine pth_pi_mutex.c does not have any detectable data race in it
+   (detectable by ThreadSanitizer)
+   

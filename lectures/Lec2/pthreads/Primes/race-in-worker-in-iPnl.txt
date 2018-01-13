@@ -1,0 +1,37 @@
+ize=thread -o iPnlr
+  625  h
+ganesh@fractus:~/cs4230/pthreads/Primes$ ./iPnlr 10000 4 3
+==================
+WARNING: ThreadSanitizer: data race (pid=5140)
+  Write of size 4 at 0x0000014ace60 by thread T2:
+    #0 worker <null> (iPnlr+0x0000004a20d3)
+
+  Previous write of size 4 at 0x0000014ace60 by thread T1:
+    #0 worker <null> (iPnlr+0x0000004a20d3)
+
+  Location is global '<null>' at 0x000000000000 (iPnlr+0x0000014ace60)
+
+  Thread T2 (tid=5143, running) created by main thread at:
+    #0 pthread_create <null> (iPnlr+0x0000004222c6)
+    #1 main <null> (iPnlr+0x0000004a243a)
+
+  Thread T1 (tid=5142, finished) created by main thread at:
+    #0 pthread_create <null> (iPnlr+0x0000004222c6)
+    #1 main <null> (iPnlr+0x0000004a243a)
+
+SUMMARY: ThreadSanitizer: data race (/home/ganesh/cs4230/pthreads/Primes/iPnlr+0x4a20d3) in worker
+==================
+24 values of base done
+0 values of base done
+0 values of base done
+0 values of base done
+0 values of base done
+0 values of base done
+0 values of base done
+0 values of base done
+0 values of base done
+0 values of base done
+
+the number of primes found was 1229
+ThreadSanitizer: reported 1 warnings
+ganesh@fractus:~/cs4230/pthreads/Primes$
