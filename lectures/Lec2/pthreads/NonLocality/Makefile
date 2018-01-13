@@ -52,12 +52,17 @@ CFLAGS  	:= -O0
 .PHONY: build clean help run check
 
 clean:
-	rm -rf *.exe *.o *.lst 
+	rm -rf *.exe *.o *.lst *.decompile *.txt 
 
-all: compile
+all: compile decompile
 
 compile:
-	$(CC) $(CC_OPTS) $(W_OPTS) -I$(INC_PATH) -o $(SRC).exe $(SRC).c > $(SRC).lst
+	@echo "Compiling..."
+	@$(CC) $(CC_OPTS) $(W_OPTS) -I$(INC_PATH) -o $(SRC).exe $(SRC).c > $(SRC).lst
+
+decompile:
+	@echo "De-Compiling..."
+	@objdump -S $(SRC).exe > $(SRC).decompile
 
 help:
 	@echo "Makefile for q1"
