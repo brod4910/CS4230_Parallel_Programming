@@ -1,5 +1,12 @@
 # CS 4230 Parallel Programming
 
+## Important Links
+
+* Class webpage  : tinyurl.com/teach4230s18
+* Class Syllabus : tinyurl.com/cs4230-syllabus-s18
+* Students       : tinyurl.com/cs4230-students-s18
+
+
 If you have setup Automation as described [here](https://sites.google.com/view/cs4230spring2018/parallel-hardware)
 
 They typing ```cade``` in you terminal will do the following
