@@ -5,8 +5,11 @@ performance of your code will suddenly increase.
 
 # Compile
 
-$ make all SRC=FalseSharing
+make SRC=FalseSharing compile LPTHREAD=-lpthread
 
+# Run
+
+./FalseSharing.exe  
 
 
 Now answer the question asked in the homework.
