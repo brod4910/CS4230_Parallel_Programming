@@ -1,1 +1,3 @@
-export CS_4230_INCLUDE="$PWD/include/"
+#!/usr/bin/bash
+export CS_4230_HOME=$HOME/CS_4230
+export CS_4230_INCLUDE="$CS_4230_HOME/include/"

@@ -1,3 +1,4 @@
+*.decompile
 *.exe
 *.lst
 .lst

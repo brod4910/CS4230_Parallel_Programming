@@ -55,6 +55,12 @@ W_OPTS		:= -Wno-variadic-macros \
 
 INC_PATH 	:= $(CS_4230_INCLUDE)
 
+LMATH := -lm
+LPTHREAD := -lpthread
+SANITIZER := 
+
+LINK_OPTS := $(LPTHREAD) $(LMATH)
+
 CC_OPTIM  	:= -O0
 
 .PHONY: build clean help run check
@@ -75,7 +81,7 @@ compile:
 	@echo "Compiling..."
 	@echo " "
 	$(CC) $(CC_OPTS) $(CC_OPTIM) $(W_OPTS) \
-		-I$(INC_PATH) -o $(SRC).exe $(SRC).c $(LPTHREAD) > $(SRC).lst
+		-I$(INC_PATH) -o $(SRC).exe $(SRC).c $(LINK_OPTS) $(SANITIZER) > $(SRC).lst
 	@echo " "
 	@echo "Done."
 	@echo " "
