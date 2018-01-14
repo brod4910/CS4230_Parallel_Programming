@@ -1,0 +1,447 @@
+GAS LISTING /tmp/ccoHTvlU.s 			page 1
+
+
+   1              		.file	"FalseSharing.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.comm	A,4096,32
+   5              		.comm	Pad,4,4
+   6              		.section	.rodata
+   7              	.LC0:
+   8 0000 61726763 		.string	"argc %d\n"
+   8      2025640A 
+   8      00
+   9              	.LC1:
+  10 0009 61726776 		.string	"argv %i %s"
+  10      20256920 
+  10      257300
+  11 0014 00000000 		.align 8
+  12              	.LC2:
+  13 0018 0A506C65 		.string	"\nPlease provide thread padding, nthreads:"
+  13      61736520 
+  13      70726F76 
+  13      69646520 
+  13      74687265 
+  14              	.LC3:
+  15 0042 25642025 		.string	"%d %d"
+  15      6400
+  16              		.align 8
+  17              	.LC5:
+  18 0048 54686520 		.string	"The elapsed time is %e seconds\n"
+  18      656C6170 
+  18      73656420 
+  18      74696D65 
+  18      20697320 
+  19              		.text
+  20              		.globl	main
+  22              	main:
+  23              	.LFB2:
+  24              		.file 1 "FalseSharing.c"
+   1:FalseSharing.c **** #include <stdio.h>
+   2:FalseSharing.c **** #include <pthread.h>
+   3:FalseSharing.c **** #include <stdlib.h>
+   4:FalseSharing.c **** #include "timer.h"
+   5:FalseSharing.c **** 
+   6:FalseSharing.c **** int A[1024]; // This array will be operated upon by many threads
+   7:FalseSharing.c **** 
+   8:FalseSharing.c **** int Pad;     // global that determines how far apart threads access mem
+   9:FalseSharing.c **** 
+  10:FalseSharing.c **** void* Thr_fn(void* rank);
+  11:FalseSharing.c **** 
+  12:FalseSharing.c **** int main(int argc, char **argv) {
+  25              		.loc 1 12 0
+  26              		.cfi_startproc
+  27 0000 55       		pushq	%rbp
+  28              		.cfi_def_cfa_offset 16
+  29              		.cfi_offset 6, -16
+  30 0001 4889E5   		movq	%rsp, %rbp
+  31              		.cfi_def_cfa_register 6
+  32 0004 4883EC70 		subq	$112, %rsp
+  33 0008 897DAC   		movl	%edi, -84(%rbp)
+GAS LISTING /tmp/ccoHTvlU.s 			page 2
+
+
+  34 000b 488975A0 		movq	%rsi, -96(%rbp)
+  35              		.loc 1 12 0
+  36 000f 64488B04 		movq	%fs:40, %rax
+  36      25280000 
+  36      00
+  37 0018 488945F8 		movq	%rax, -8(%rbp)
+  38 001c 31C0     		xorl	%eax, %eax
+  13:FalseSharing.c ****   
+  14:FalseSharing.c ****   printf("argc %d\n",argc);
+  39              		.loc 1 14 0
+  40 001e 8B45AC   		movl	-84(%rbp), %eax
+  41 0021 89C6     		movl	%eax, %esi
+  42 0023 BF000000 		movl	$.LC0, %edi
+  42      00
+  43 0028 B8000000 		movl	$0, %eax
+  43      00
+  44 002d E8000000 		call	printf
+  44      00
+  45              	.LBB2:
+  15:FalseSharing.c ****   for(int i; i < argc; ++i)
+  46              		.loc 1 15 0
+  47 0032 EB2F     		jmp	.L2
+  48              	.L3:
+  16:FalseSharing.c ****     printf("argv %i %s",i,argv[i]);
+  49              		.loc 1 16 0 discriminator 2
+  50 0034 8B45B4   		movl	-76(%rbp), %eax
+  51 0037 4898     		cltq
+  52 0039 488D14C5 		leaq	0(,%rax,8), %rdx
+  52      00000000 
+  53 0041 488B45A0 		movq	-96(%rbp), %rax
+  54 0045 4801D0   		addq	%rdx, %rax
+  55 0048 488B10   		movq	(%rax), %rdx
+  56 004b 8B45B4   		movl	-76(%rbp), %eax
+  57 004e 89C6     		movl	%eax, %esi
+  58 0050 BF000000 		movl	$.LC1, %edi
+  58      00
+  59 0055 B8000000 		movl	$0, %eax
+  59      00
+  60 005a E8000000 		call	printf
+  60      00
+  15:FalseSharing.c ****   for(int i; i < argc; ++i)
+  61              		.loc 1 15 0 discriminator 2
+  62 005f 8345B401 		addl	$1, -76(%rbp)
+  63              	.L2:
+  15:FalseSharing.c ****   for(int i; i < argc; ++i)
+  64              		.loc 1 15 0 is_stmt 0 discriminator 1
+  65 0063 8B45B4   		movl	-76(%rbp), %eax
+  66 0066 3B45AC   		cmpl	-84(%rbp), %eax
+  67 0069 7CC9     		jl	.L3
+  68              	.LBE2:
+  17:FalseSharing.c **** 
+  18:FalseSharing.c ****   int Nthr;
+  19:FalseSharing.c ****   long thr; // Long in case of a 64-bit system
+  20:FalseSharing.c ****   
+  21:FalseSharing.c ****   double start, finish, elapsed; // timing vars
+  22:FalseSharing.c ****   
+  23:FalseSharing.c ****   printf("\nPlease provide thread padding, nthreads:\n");
+GAS LISTING /tmp/ccoHTvlU.s 			page 3
+
+
+  69              		.loc 1 23 0 is_stmt 1
+  70 006b BF000000 		movl	$.LC2, %edi
+  70      00
+  71 0070 E8000000 		call	puts
+  71      00
+  24:FalseSharing.c ****   scanf("%d %d", &Pad, &Nthr);
+  72              		.loc 1 24 0
+  73 0075 488D45B0 		leaq	-80(%rbp), %rax
+  74 0079 4889C2   		movq	%rax, %rdx
+  75 007c BE000000 		movl	$Pad, %esi
+  75      00
+  76 0081 BF000000 		movl	$.LC3, %edi
+  76      00
+  77 0086 B8000000 		movl	$0, %eax
+  77      00
+  78 008b E8000000 		call	__isoc99_scanf
+  78      00
+  25:FalseSharing.c ****   
+  26:FalseSharing.c ****   pthread_t* thr_h = (pthread_t*) malloc (Nthr*sizeof(pthread_t));
+  79              		.loc 1 26 0
+  80 0090 8B45B0   		movl	-80(%rbp), %eax
+  81 0093 4898     		cltq
+  82 0095 48C1E003 		salq	$3, %rax
+  83 0099 4889C7   		movq	%rax, %rdi
+  84 009c E8000000 		call	malloc
+  84      00
+  85 00a1 488945C0 		movq	%rax, -64(%rbp)
+  86              	.LBB3:
+  27:FalseSharing.c ****   
+  28:FalseSharing.c ****   GET_TIME(start);
+  87              		.loc 1 28 0
+  88 00a5 488D45E0 		leaq	-32(%rbp), %rax
+  89 00a9 BE000000 		movl	$0, %esi
+  89      00
+  90 00ae 4889C7   		movq	%rax, %rdi
+  91 00b1 E8000000 		call	gettimeofday
+  91      00
+  92 00b6 488B45E0 		movq	-32(%rbp), %rax
+  93 00ba 660FEFC9 		pxor	%xmm1, %xmm1
+  94 00be F2480F2A 		cvtsi2sdq	%rax, %xmm1
+  94      C8
+  95 00c3 488B45E8 		movq	-24(%rbp), %rax
+  96 00c7 660FEFC0 		pxor	%xmm0, %xmm0
+  97 00cb F2480F2A 		cvtsi2sdq	%rax, %xmm0
+  97      C0
+  98 00d0 F20F1015 		movsd	.LC4(%rip), %xmm2
+  98      00000000 
+  99 00d8 F20F5EC2 		divsd	%xmm2, %xmm0
+ 100 00dc F20F58C1 		addsd	%xmm1, %xmm0
+ 101 00e0 F20F1145 		movsd	%xmm0, -56(%rbp)
+ 101      C8
+ 102              	.LBE3:
+  29:FalseSharing.c ****   
+  30:FalseSharing.c ****   for (thr = 0; thr < Nthr; ++thr)
+ 103              		.loc 1 30 0
+ 104 00e5 48C745B8 		movq	$0, -72(%rbp)
+ 104      00000000 
+GAS LISTING /tmp/ccoHTvlU.s 			page 4
+
+
+ 105 00ed EB2F     		jmp	.L4
+ 106              	.L5:
+  31:FalseSharing.c ****     pthread_create(&thr_h[thr], NULL, Thr_fn, (void *)thr);
+ 107              		.loc 1 31 0 discriminator 3
+ 108 00ef 488B45B8 		movq	-72(%rbp), %rax
+ 109 00f3 488B55B8 		movq	-72(%rbp), %rdx
+ 110 00f7 488D0CD5 		leaq	0(,%rdx,8), %rcx
+ 110      00000000 
+ 111 00ff 488B55C0 		movq	-64(%rbp), %rdx
+ 112 0103 488D3C11 		leaq	(%rcx,%rdx), %rdi
+ 113 0107 4889C1   		movq	%rax, %rcx
+ 114 010a BA000000 		movl	$Thr_fn, %edx
+ 114      00
+ 115 010f BE000000 		movl	$0, %esi
+ 115      00
+ 116 0114 E8000000 		call	pthread_create
+ 116      00
+  30:FalseSharing.c ****     pthread_create(&thr_h[thr], NULL, Thr_fn, (void *)thr);
+ 117              		.loc 1 30 0 discriminator 3
+ 118 0119 488345B8 		addq	$1, -72(%rbp)
+ 118      01
+ 119              	.L4:
+  30:FalseSharing.c ****     pthread_create(&thr_h[thr], NULL, Thr_fn, (void *)thr);
+ 120              		.loc 1 30 0 is_stmt 0 discriminator 1
+ 121 011e 8B45B0   		movl	-80(%rbp), %eax
+ 122 0121 4898     		cltq
+ 123 0123 483B45B8 		cmpq	-72(%rbp), %rax
+ 124 0127 7FC6     		jg	.L5
+  32:FalseSharing.c ****   
+  33:FalseSharing.c ****   for (thr = 0; thr < Nthr; ++thr)
+ 125              		.loc 1 33 0 is_stmt 1
+ 126 0129 48C745B8 		movq	$0, -72(%rbp)
+ 126      00000000 
+ 127 0131 EB28     		jmp	.L6
+ 128              	.L7:
+  34:FalseSharing.c ****     pthread_join(thr_h[thr], NULL);
+ 129              		.loc 1 34 0 discriminator 3
+ 130 0133 488B45B8 		movq	-72(%rbp), %rax
+ 131 0137 488D14C5 		leaq	0(,%rax,8), %rdx
+ 131      00000000 
+ 132 013f 488B45C0 		movq	-64(%rbp), %rax
+ 133 0143 4801D0   		addq	%rdx, %rax
+ 134 0146 488B00   		movq	(%rax), %rax
+ 135 0149 BE000000 		movl	$0, %esi
+ 135      00
+ 136 014e 4889C7   		movq	%rax, %rdi
+ 137 0151 E8000000 		call	pthread_join
+ 137      00
+  33:FalseSharing.c ****     pthread_join(thr_h[thr], NULL);
+ 138              		.loc 1 33 0 discriminator 3
+ 139 0156 488345B8 		addq	$1, -72(%rbp)
+ 139      01
+ 140              	.L6:
+  33:FalseSharing.c ****     pthread_join(thr_h[thr], NULL);
+ 141              		.loc 1 33 0 is_stmt 0 discriminator 1
+ 142 015b 8B45B0   		movl	-80(%rbp), %eax
+ 143 015e 4898     		cltq
+GAS LISTING /tmp/ccoHTvlU.s 			page 5
+
+
+ 144 0160 483B45B8 		cmpq	-72(%rbp), %rax
+ 145 0164 7FCD     		jg	.L7
+ 146              	.LBB4:
+  35:FalseSharing.c ****   
+  36:FalseSharing.c ****   GET_TIME(finish);
+ 147              		.loc 1 36 0 is_stmt 1
+ 148 0166 488D45E0 		leaq	-32(%rbp), %rax
+ 149 016a BE000000 		movl	$0, %esi
+ 149      00
+ 150 016f 4889C7   		movq	%rax, %rdi
+ 151 0172 E8000000 		call	gettimeofday
+ 151      00
+ 152 0177 488B45E0 		movq	-32(%rbp), %rax
+ 153 017b 660FEFC9 		pxor	%xmm1, %xmm1
+ 154 017f F2480F2A 		cvtsi2sdq	%rax, %xmm1
+ 154      C8
+ 155 0184 488B45E8 		movq	-24(%rbp), %rax
+ 156 0188 660FEFC0 		pxor	%xmm0, %xmm0
+ 157 018c F2480F2A 		cvtsi2sdq	%rax, %xmm0
+ 157      C0
+ 158 0191 F20F1015 		movsd	.LC4(%rip), %xmm2
+ 158      00000000 
+ 159 0199 F20F5EC2 		divsd	%xmm2, %xmm0
+ 160 019d F20F58C1 		addsd	%xmm1, %xmm0
+ 161 01a1 F20F1145 		movsd	%xmm0, -48(%rbp)
+ 161      D0
+ 162              	.LBE4:
+  37:FalseSharing.c ****   
+  38:FalseSharing.c ****   elapsed = finish - start;
+ 163              		.loc 1 38 0
+ 164 01a6 F20F1045 		movsd	-48(%rbp), %xmm0
+ 164      D0
+ 165 01ab F20F5C45 		subsd	-56(%rbp), %xmm0
+ 165      C8
+ 166 01b0 F20F1145 		movsd	%xmm0, -40(%rbp)
+ 166      D8
+  39:FalseSharing.c ****   printf("The elapsed time is %e seconds\n", elapsed);
+ 167              		.loc 1 39 0
+ 168 01b5 488B45D8 		movq	-40(%rbp), %rax
+ 169 01b9 48894598 		movq	%rax, -104(%rbp)
+ 170 01bd F20F1045 		movsd	-104(%rbp), %xmm0
+ 170      98
+ 171 01c2 BF000000 		movl	$.LC5, %edi
+ 171      00
+ 172 01c7 B8010000 		movl	$1, %eax
+ 172      00
+ 173 01cc E8000000 		call	printf
+ 173      00
+  40:FalseSharing.c **** 
+  41:FalseSharing.c ****   return 0;
+ 174              		.loc 1 41 0
+ 175 01d1 B8000000 		movl	$0, %eax
+ 175      00
+  42:FalseSharing.c **** }
+ 176              		.loc 1 42 0
+ 177 01d6 488B4DF8 		movq	-8(%rbp), %rcx
+ 178 01da 6448330C 		xorq	%fs:40, %rcx
+GAS LISTING /tmp/ccoHTvlU.s 			page 6
+
+
+ 178      25280000 
+ 178      00
+ 179 01e3 7405     		je	.L9
+ 180 01e5 E8000000 		call	__stack_chk_fail
+ 180      00
+ 181              	.L9:
+ 182 01ea C9       		leave
+ 183              		.cfi_def_cfa 7, 8
+ 184 01eb C3       		ret
+ 185              		.cfi_endproc
+ 186              	.LFE2:
+ 188              		.section	.rodata
+ 189              	.LC6:
+ 190 0068 54687265 		.string	"Thread %i : Start Increment\n"
+ 190      61642025 
+ 190      69203A20 
+ 190      53746172 
+ 190      7420496E 
+ 191 0085 000000   		.align 8
+ 192              	.LC7:
+ 193 0088 54687265 		.string	"Thread %i : Completed Increment\n"
+ 193      61642025 
+ 193      69203A20 
+ 193      436F6D70 
+ 193      6C657465 
+ 194              		.text
+ 195              		.globl	Thr_fn
+ 197              	Thr_fn:
+ 198              	.LFB3:
+  43:FalseSharing.c **** 
+  44:FalseSharing.c **** void *Thr_fn(void *rank) {
+ 199              		.loc 1 44 0
+ 200              		.cfi_startproc
+ 201 01ec 55       		pushq	%rbp
+ 202              		.cfi_def_cfa_offset 16
+ 203              		.cfi_offset 6, -16
+ 204 01ed 4889E5   		movq	%rsp, %rbp
+ 205              		.cfi_def_cfa_register 6
+ 206 01f0 4883EC20 		subq	$32, %rsp
+ 207 01f4 48897DE8 		movq	%rdi, -24(%rbp)
+  45:FalseSharing.c ****   int my_rank = (long) rank;
+ 208              		.loc 1 45 0
+ 209 01f8 488B45E8 		movq	-24(%rbp), %rax
+ 210 01fc 8945F4   		movl	%eax, -12(%rbp)
+  46:FalseSharing.c ****   printf("Thread %i : Start Increment\n",my_rank);
+ 211              		.loc 1 46 0
+ 212 01ff 8B45F4   		movl	-12(%rbp), %eax
+ 213 0202 89C6     		movl	%eax, %esi
+ 214 0204 BF000000 		movl	$.LC6, %edi
+ 214      00
+ 215 0209 B8000000 		movl	$0, %eax
+ 215      00
+ 216 020e E8000000 		call	printf
+ 216      00
+ 217              	.LBB5:
+  47:FalseSharing.c ****   for (long i=0; i<1024*1048576; ++i) { // 2^20
+ 218              		.loc 1 47 0
+GAS LISTING /tmp/ccoHTvlU.s 			page 7
+
+
+ 219 0213 48C745F8 		movq	$0, -8(%rbp)
+ 219      00000000 
+ 220 021b EB25     		jmp	.L11
+ 221              	.L12:
+  48:FalseSharing.c ****     A[my_rank*Pad]++;
+ 222              		.loc 1 48 0 discriminator 3
+ 223 021d 8B050000 		movl	Pad(%rip), %eax
+ 223      0000
+ 224 0223 0FAF45F4 		imull	-12(%rbp), %eax
+ 225 0227 4863D0   		movslq	%eax, %rdx
+ 226 022a 8B149500 		movl	A(,%rdx,4), %edx
+ 226      000000
+ 227 0231 83C201   		addl	$1, %edx
+ 228 0234 4898     		cltq
+ 229 0236 89148500 		movl	%edx, A(,%rax,4)
+ 229      000000
+  47:FalseSharing.c ****   for (long i=0; i<1024*1048576; ++i) { // 2^20
+ 230              		.loc 1 47 0 discriminator 3
+ 231 023d 488345F8 		addq	$1, -8(%rbp)
+ 231      01
+ 232              	.L11:
+  47:FalseSharing.c ****   for (long i=0; i<1024*1048576; ++i) { // 2^20
+ 233              		.loc 1 47 0 is_stmt 0 discriminator 1
+ 234 0242 48817DF8 		cmpq	$1073741823, -8(%rbp)
+ 234      FFFFFF3F 
+ 235 024a 7ED1     		jle	.L12
+ 236              	.LBE5:
+  49:FalseSharing.c ****   }
+  50:FalseSharing.c ****   printf("Thread %i : Completed Increment\n",my_rank);
+ 237              		.loc 1 50 0 is_stmt 1
+ 238 024c 8B45F4   		movl	-12(%rbp), %eax
+ 239 024f 89C6     		movl	%eax, %esi
+ 240 0251 BF000000 		movl	$.LC7, %edi
+ 240      00
+ 241 0256 B8000000 		movl	$0, %eax
+ 241      00
+ 242 025b E8000000 		call	printf
+ 242      00
+  51:FalseSharing.c **** 
+  52:FalseSharing.c ****   return NULL;
+ 243              		.loc 1 52 0
+ 244 0260 B8000000 		movl	$0, %eax
+ 244      00
+  53:FalseSharing.c **** }
+ 245              		.loc 1 53 0
+ 246 0265 C9       		leave
+ 247              		.cfi_def_cfa 7, 8
+ 248 0266 C3       		ret
+ 249              		.cfi_endproc
+ 250              	.LFE3:
+ 252              		.section	.rodata
+ 253 00a9 00000000 		.align 8
+ 253      000000
+ 254              	.LC4:
+ 255 00b0 00000000 		.long	0
+ 256 00b4 80842E41 		.long	1093567616
+ 257              		.text
+GAS LISTING /tmp/ccoHTvlU.s 			page 8
+
+
+ 258              	.Letext0:
+ 259              		.file 2 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 260              		.file 3 "/usr/include/x86_64-linux-gnu/bits/pthreadtypes.h"
+ 261              		.file 4 "/usr/include/x86_64-linux-gnu/bits/time.h"
+ 262              		.file 5 "/usr/include/x86_64-linux-gnu/sys/time.h"
+GAS LISTING /tmp/ccoHTvlU.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 FalseSharing.c
+                            *COM*:0000000000001000 A
+                            *COM*:0000000000000004 Pad
+     /tmp/ccoHTvlU.s:22     .text:0000000000000000 main
+     /tmp/ccoHTvlU.s:197    .text:00000000000001ec Thr_fn
+
+UNDEFINED SYMBOLS
+printf
+puts
+__isoc99_scanf
+malloc
+gettimeofday
+pthread_create
+pthread_join
+__stack_chk_fail
