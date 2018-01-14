@@ -1,0 +1,3 @@
+[submodule "src/pthreads/pdf"]
+	path = src/pthreads/pdf
+	url = https://git.overleaf.com/13174730gfcmdvhmnpnt
