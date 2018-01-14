@@ -2,7 +2,7 @@
 CC 			:= gcc
 
 # Compiler Options
-CC_OPTS		:=-g -Wa,-a,-ad 
+CC_OPTS		:=-g -Wa,-a,-ad
 
 # TODO Separate this into different file
 # TODO Document these
@@ -51,7 +51,7 @@ W_OPTS		:= -Wno-variadic-macros \
 -Wno-ignored-attributes \
 -Wno-missing-field-initializers \
 -Wdouble-promotion \
--Wformat=2 
+-Wformat=2
 
 INC_PATH 	:= .
 
@@ -64,15 +64,18 @@ all: compile decompile
 clean:
 	@echo "Cleaning..."
 	rm -rf *.exe *.o *.lst *.decompile *.txt .lst
+	@echo "Done."
 
 compile:
 	@echo "Compiling..."
 	@$(CC) $(CC_OPTS) $(CC_OPTIM) $(W_OPTS) \
-		-I$(INC_PATH) -o $(SRC).exe $(SRC).c > $(SRC).lst
+		-I$(INC_PATH) -o $(SRC).exe $(SRC).c $(LPTHREAD) > $(SRC).lst
+	@echo "Done."
 
 decompile:
 	@echo "De-Compiling..."
 	@objdump -S $(SRC).exe > $(SRC).decompile
+	@echo "Done."
 
 run:
 	./$(SRC).exe
