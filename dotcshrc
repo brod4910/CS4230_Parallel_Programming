@@ -1,2 +1,1 @@
-
-export TBB_HOME="$HOME/CS_4230/tbb"
+export CS_4230_INCLUDE="$PWD/include/"

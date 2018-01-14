@@ -53,7 +53,7 @@ W_OPTS		:= -Wno-variadic-macros \
 -Wdouble-promotion \
 -Wformat=2
 
-INC_PATH 	:= .
+INC_PATH 	:= $(CS_4230_INCLUDE)
 
 CC_OPTIM  	:= -O0
 
@@ -62,20 +62,31 @@ CC_OPTIM  	:= -O0
 all: compile decompile
 
 clean:
+	@echo " "
 	@echo "Cleaning..."
+	@echo " "
 	rm -rf *.exe *.o *.lst *.decompile *.txt .lst
+	@echo " "
 	@echo "Done."
+	@echo " "
 
 compile:
+	@echo " "
 	@echo "Compiling..."
-	@$(CC) $(CC_OPTS) $(CC_OPTIM) $(W_OPTS) \
+	@echo " "
+	$(CC) $(CC_OPTS) $(CC_OPTIM) $(W_OPTS) \
 		-I$(INC_PATH) -o $(SRC).exe $(SRC).c $(LPTHREAD) > $(SRC).lst
+	@echo " "
 	@echo "Done."
+	@echo " "
 
 decompile:
+	@echo " "
 	@echo "De-Compiling..."
-	@objdump -S $(SRC).exe > $(SRC).decompile
+	@echo " "
+	objdump -S $(SRC).exe > $(SRC).decompile
 	@echo "Done."
+	@echo " "
 
 run:
 	./$(SRC).exe
