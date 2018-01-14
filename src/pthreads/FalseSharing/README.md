@@ -9,8 +9,6 @@ performance of your code will suddenly increase.
 
 # Run
 
-```./FalseSharing.exe```
-
+```./FalseSharing```
 
 Now answer the question asked in the homework.
-
