@@ -1,14 +1,11 @@
-This is an illustration of false sharing.
-
+# False sharing.
 As you increase the padding beyond a certain "magic" value, the
 performance of your code will suddenly increase.
 
-# Compile
+## Compiling
 
-```make SRC=FalseSharing compile LPTHREAD=-lpthread```
+`make SRC=FalseSharing compile LPTHREAD=-lpthread`
 
-# Run
+## Running
 
-```./FalseSharing```
-
-Now answer the question asked in the homework.
+`./FalseSharing.exe`
