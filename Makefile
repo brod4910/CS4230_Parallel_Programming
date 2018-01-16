@@ -57,9 +57,10 @@ INC_PATH_1 := .
 INC_PATH_2 := $(CS_4230_INCLUDE)
 INC_PATH := -I$(INC_PATH_1) -I$(INC_PATH_2)
 
+SANITIZER :=
 LMATH := -lm
 LPTHREAD := -lpthread
-SANITIZER := 
+
 
 LINK_OPTS := $(LPTHREAD) $(LMATH)
 
@@ -83,7 +84,7 @@ compile:
 	@echo "Compiling..."
 	@echo " "
 	$(CC) $(CC_OPTS) $(CC_OPTIM) $(W_OPTS) \
-		$(INC_PATH) -o $(SRC).exe $(SRC).c $(LINK_OPTS) $(SANITIZER) > $(SRC).lst
+		$(INC_PATH) -o $(SRC).exe $(SRC).c $(SANITIZER) $(LINK_OPTS)  > $(SRC).lst
 	@echo " "
 	@echo "Done."
 	@echo " "
