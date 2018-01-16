@@ -2,7 +2,7 @@
 
 ## Clone Recursive
 
-`git clone --recursive git@gitlab.com:vinutah/CS_4230.git tester`
+`git clone --recursive git@gitlab.com:vinutah/CS_4230.git`
 
 ## Important Links
 
