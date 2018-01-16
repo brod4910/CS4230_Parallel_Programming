@@ -96,13 +96,9 @@ decompile:
 	@echo "Done."
 	@echo " "
 
-run:
-	./$(SRC).exe
-
 help:
 	@echo "Makefile for Assignment 1"
 	@echo " help print this documentation and exit"
 	@echo " clean"
 	@echo " compile"
 	@echo " decompile"
-	@echo " run"
