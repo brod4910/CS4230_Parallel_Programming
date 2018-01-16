@@ -53,8 +53,9 @@ W_OPTS		:= -Wno-variadic-macros \
 -Wdouble-promotion \
 -Wformat=2
 
-INC_PATH := .
-INC_PATH += $(CS_4230_INCLUDE)
+INC_PATH_1 := .
+INC_PATH_2 := $(CS_4230_INCLUDE)
+INC_PATH := -I$(INC_PATH_1) -I$(INC_PATH_2)
 
 LMATH := -lm
 LPTHREAD := -lpthread
@@ -82,7 +83,7 @@ compile:
 	@echo "Compiling..."
 	@echo " "
 	$(CC) $(CC_OPTS) $(CC_OPTIM) $(W_OPTS) \
-		-I$(INC_PATH) -o $(SRC).exe $(SRC).c $(LINK_OPTS) $(SANITIZER) > $(SRC).lst
+		$(INC_PATH) -o $(SRC).exe $(SRC).c $(LINK_OPTS) $(SANITIZER) > $(SRC).lst
 	@echo " "
 	@echo "Done."
 	@echo " "
