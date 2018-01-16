@@ -4,7 +4,7 @@ performance of your code will suddenly increase.
 
 ## Compiling
 
-`make SRC=FalseSharing
+`make SRC=FalseSharing`
 
 ## Running
 
