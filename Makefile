@@ -53,7 +53,8 @@ W_OPTS		:= -Wno-variadic-macros \
 -Wdouble-promotion \
 -Wformat=2
 
-INC_PATH 	:= $(CS_4230_INCLUDE)
+INC_PATH := .
+INC_PATH += $(CS_4230_INCLUDE)
 
 LMATH := -lm
 LPTHREAD := -lpthread
@@ -71,7 +72,7 @@ clean:
 	@echo " "
 	@echo "Cleaning..."
 	@echo " "
-	rm -rf *.exe *.o *.lst *.decompile *.txt .lst
+	rm -rf *.exe *.o *.lst *.decompile *.txt .lst *.out
 	@echo " "
 	@echo "Done."
 	@echo " "
@@ -91,6 +92,7 @@ decompile:
 	@echo "De-Compiling..."
 	@echo " "
 	objdump -S $(SRC).exe > $(SRC).decompile
+	@echo " "
 	@echo "Done."
 	@echo " "
 
