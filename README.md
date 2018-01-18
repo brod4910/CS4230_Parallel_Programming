@@ -42,5 +42,12 @@ Please note that every terminal that you compile the sources provided
 in CS_4230 uses environment variables, so please ensure that
 you are in `bash` and have executed `source dotcshrc`
 
+## Compiling
+
+`make SRC=<filename>`
+
+Please not that you need not provide the .c as the extension, we figure 
+that out ourselves.
+
 
 
