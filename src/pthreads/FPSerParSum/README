@@ -22,9 +22,9 @@ some point.
 
 # Compile
 
-`make SRC=sersum`
+make SRC=sersum
 
-`make SRC=parsum`
+make SRC=parsum
 
 
 
