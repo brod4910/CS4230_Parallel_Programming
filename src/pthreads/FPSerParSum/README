@@ -19,3 +19,13 @@ saturate? Does parsum's answers saturate? Explain what is going on.
 
 Ans: parsum can faithfully double the answers while sersum saturates at
 some point.
+
+# Compile
+
+`make SRC=sersum`
+
+`make SRC=parsum`
+
+
+
+
