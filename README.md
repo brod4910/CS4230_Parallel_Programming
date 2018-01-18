@@ -38,9 +38,16 @@ change directory into CS_4230
 
 ## CS_4230 Setup
 
+Please note that we expect you to be in `$HOME` on your machine 
+when you are setting up the CS_4230.
+
+We are expecting that the class repository be checked out in $HOME directory.
+because dotcshrc expects CS_4230 directory to be at $HOME.
+
 Please note that every terminal that you compile the sources provided
 in CS_4230 uses environment variables, so please ensure that
 you are in `bash` and have executed `source dotcshrc`
+
 
 ## Compiling
 
