@@ -33,12 +33,12 @@ $ cd CS_4230/
 $ source dotcshrc
 ```
 
-As shown above, the first thing to do is to change from tcsh to bash and 
+As shown above, the first thing to do is to change from tcsh to bash and
 change directory into CS_4230
 
 ## CS_4230 Setup
 
-Please note that we expect you to be in `$HOME` on your machine 
+Please note that we expect you to be in `$HOME` on your machine
 when you are setting up the CS_4230.
 
 We are expecting that the class repository be checked out in `$HOME` directory.
@@ -53,8 +53,23 @@ you are in `bash` and have executed `source dotcshrc`
 
 `make SRC=<filename>`
 
-Please not that you need not provide the .c as the extension, we figure 
+Please not that you need not provide the .c as the extension, we figure
 that out ourselves.
 
+## Open MP
 
+### Compile
 
+`make SRC=hello_world OMP=-fopenmp`
+
+### Run
+
+`
+$ ./hello_world.exe 5
+argc = 2
+Hello from thread 0 of 5
+Hello from thread 2 of 5
+Hello from thread 4 of 5
+Hello from thread 3 of 5
+Hello from thread 1 of 5
+`
