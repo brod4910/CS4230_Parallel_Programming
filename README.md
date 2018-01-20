@@ -68,8 +68,7 @@ that out ourselves.
 
 ### Run
 
-`
-$ ./hello_world.exe 5
+`$ ./hello_world.exe 5
 argc = 2
 Hello from thread 0 of 5
 Hello from thread 2 of 5
