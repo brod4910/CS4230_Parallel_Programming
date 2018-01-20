@@ -80,7 +80,7 @@ compile:
 	@echo "Compiling..."
 	@echo " "
 	$(CC) $(CC_OPTS) $(CC_OPTIM) $(W_OPTS) \
-		$(INC_PATH) -o $(SRC).exe $(SRC).c $(SANITIZER) $(LINK_OPTS)  > $(SRC).lst
+		$(INC_PATH) $(OMP) -o $(SRC).exe $(SRC).c $(SANITIZER) $(LINK_OPTS)  > $(SRC).lst
 	@echo " "
 	@echo "Done."
 	@echo " "
