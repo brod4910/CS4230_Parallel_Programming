@@ -57,6 +57,11 @@ SANITIZER :=
 LMATH := -lm
 LPTHREAD := -lpthread
 
+PARLIB :=
+
+ifeq (${PARLIB}, openmp)
+OPENMP := -fopenmp
+endif
 
 LINK_OPTS := $(LPTHREAD) $(LMATH)
 
@@ -80,7 +85,7 @@ compile:
 	@echo "Compiling..."
 	@echo " "
 	$(CC) $(CC_OPTS) $(CC_OPTIM) $(W_OPTS) \
-		$(INC_PATH) $(OMP) -o $(SRC).exe $(SRC).c $(SANITIZER) $(LINK_OPTS)  > $(SRC).lst
+		$(INC_PATH) $(OPENMP) -o $(SRC).exe $(SRC).c $(SANITIZER) $(LINK_OPTS)  > $(SRC).lst
 	@echo " "
 	@echo "Done."
 	@echo " "

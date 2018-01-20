@@ -60,7 +60,7 @@ that out ourselves.
 
 ### Compile
 
-`make SRC=hello_world OMP=-fopenmp`
+`make SRC=hello_world PARLIB=openmp`
 
 ### Run
 
