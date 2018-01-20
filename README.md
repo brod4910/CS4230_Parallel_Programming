@@ -59,8 +59,11 @@ that out ourselves.
 ## Open MP
 
 ### Compile
+
 `$ cd CS_4230/src/openmp/`
+
 `$ cd hello_world/`
+
 `$ make SRC=hello_world PARLIB=openmp`
 
 ### Run
