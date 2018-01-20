@@ -60,7 +60,11 @@ that out ourselves.
 
 ### Compile
 
-`$ cd CS_4230/src/openmp/`
+`$ cd CS_4230/`
+
+`$ source dotcshrc`
+
+`$ cd src/openmp/`
 
 `$ cd hello_world/`
 
