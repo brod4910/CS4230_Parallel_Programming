@@ -1,6 +1,10 @@
 # Compiler
 CC 			:= gcc
 
+ifeq ($(CC), g++)
+LANG := cpp
+endif
+
 # Compiler Options
 CC_OPTS		:=-g -Wa,-a,-ad
 
@@ -87,7 +91,8 @@ compile:
 	@echo " "
 	@echo " "
 	$(CC) $(CC_OPTS) $(CC_OPTIM) $(W_OPTS) \
-		$(INC_PATH) $(OPENMP) -o $(SRC).exe $(SRC).c $(SANITIZER) $(LINK_OPTS)  > $(SRC).lst
+		$(INC_PATH) $(OPENMP) -o $(SRC).exe $(SRC).$(LANG) \
+		$(SANITIZER) $(LINK_OPTS)  > $(SRC).lst
 	@echo " "
 	@echo "Done."
 	@echo " "
@@ -105,7 +110,8 @@ deploy: check-env
 
 check-env:
 ifndef CS_4230_INCLUDE
-	$(error CS_4230_HOME UNDEFINED $ source ~/CS_4230/dotcshrc)
+	$(error CS_4230_HOME UNDEFINED \
+	$ source ~/CS_4230/dotcshrc)
 endif
 
 help:
