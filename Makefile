@@ -2,7 +2,7 @@
 CC 			:= gcc
 
 # Compiler Options
-CC_OPTS		:=-g -Wa,-a,-ad
+CC_OPTS		:=-std=c99 -g -Wa,-a,-ad
 
 # TODO Separate this into different file
 # TODO Document these
