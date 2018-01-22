@@ -1,8 +1,10 @@
 # Compiler
 CC 			:= gcc
 
+LANG_EXT := c
+
 ifeq ($(CC), g++)
-LANG := cpp
+LANG_EXT := cpp
 endif
 
 # Compiler Options
@@ -91,7 +93,7 @@ compile:
 	@echo " "
 	@echo " "
 	$(CC) $(CC_OPTS) $(CC_OPTIM) $(W_OPTS) \
-		$(INC_PATH) $(OPENMP) -o $(SRC).exe $(SRC).$(LANG) \
+		$(INC_PATH) $(OPENMP) -o $(SRC).exe $(SRC).$(LANG_EXT) \
 		$(SANITIZER) $(LINK_OPTS)  > $(SRC).lst
 	@echo " "
 	@echo "Done."
