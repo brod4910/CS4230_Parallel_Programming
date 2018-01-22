@@ -1,6 +1,12 @@
 # Compiler
 CC 			:= gcc
 
+LANG_EXT := c
+
+ifeq ($(CC), g++)
+LANG_EXT := cpp
+endif
+
 # Compiler Options
 CC_OPTS		:=-std=c99 -g -Wa,-a,-ad
 
@@ -67,9 +73,10 @@ LINK_OPTS := $(LPTHREAD) $(LMATH)
 
 CC_OPTIM  	:= -O0
 
-.PHONY: build clean help run check
+.PHONY: deploy check-env build clean help run check
 
-all: compile decompile
+
+all: deploy compile decompile
 
 clean:
 	@echo " "
@@ -84,8 +91,10 @@ compile:
 	@echo " "
 	@echo "Compiling..."
 	@echo " "
+	@echo " "
 	$(CC) $(CC_OPTS) $(CC_OPTIM) $(W_OPTS) \
-		$(INC_PATH) $(OPENMP) -o $(SRC).exe $(SRC).c $(SANITIZER) $(LINK_OPTS)  > $(SRC).lst
+		$(INC_PATH) $(OPENMP) -o $(SRC).exe $(SRC).$(LANG_EXT) \
+		$(SANITIZER) $(LINK_OPTS)  > $(SRC).lst
 	@echo " "
 	@echo "Done."
 	@echo " "
@@ -99,8 +108,16 @@ decompile:
 	@echo "Done."
 	@echo " "
 
+deploy: check-env
+
+check-env:
+ifndef CS_4230_INCLUDE
+	$(error CS_4230_HOME UNDEFINED \
+	$ source ~/CS_4230/dotcshrc)
+endif
+
 help:
-	@echo "Makefile for Assignment 1"
+	@echo "Makefile for CS_4230"
 	@echo " help print this documentation and exit"
 	@echo " clean"
 	@echo " compile"
