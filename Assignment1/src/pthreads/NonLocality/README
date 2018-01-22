@@ -1,0 +1,8 @@
+This illustrates good and bad locality of sequential code.
+
+# Compile-Decompile
+
+$ make SRC=badLoc
+$ make SRC=goodLoc
+
+Now answer the question asked in the homework.

@@ -1,0 +1,31 @@
+Compile and run sersum.c and parsum.c for inputs going as follows:
+
+4 1.2e-38
+8 1.2e-38
+16 1.2e-38
+20 1.2e-38
+21 1.2e-38
+22 1.2e-38
+23 1.2e-38
+24 1.2e-38
+25 1.2e-38
+26 1.2e-38
+27 1.2e-38
+
+Comment on whether the same sum is being done (albeit in a left-linear
+manner or a parallel balanced-tree manner). Observe the answer as we
+increase the input range via the first arg. Where does sersum's answers
+saturate? Does parsum's answers saturate? Explain what is going on.
+
+Ans: parsum can faithfully double the answers while sersum saturates at
+some point.
+
+# Compile
+
+make SRC=sersum
+
+make SRC=parsum
+
+
+
+

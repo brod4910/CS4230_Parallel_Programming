@@ -1,0 +1,54 @@
+wow, atan included with sanitize?!
+
+ganesh@fractus:~/cs4230/pthreads/Pi$ 
+ganesh@fractus:~/cs4230/pthreads/Pi$ clang pth_pi_busy1.c -lpthread  -fsanitize=thread -o pth_pi_busy1
+ganesh@fractus:~/cs4230/pthreads/Pi$ ./pth_pi_busy1 4  1000000
+==================
+WARNING: ThreadSanitizer: data race (pid=5408)
+  Read of size 4 at 0x0000014ace90 by thread T2:
+    #0 Thread_sum <null> (pth_pi_busy1+0x0000004a2725)
+
+  Previous write of size 4 at 0x0000014ace90 by thread T1:
+    #0 Thread_sum <null> (pth_pi_busy1+0x0000004a27d4)
+
+  Location is global '<null>' at 0x000000000000 (pth_pi_busy1+0x0000014ace90)
+
+  Thread T2 (tid=5411, running) created by main thread at:
+    #0 pthread_create <null> (pth_pi_busy1+0x000000422346)
+    #1 main <null> (pth_pi_busy1+0x0000004a217c)
+
+  Thread T1 (tid=5410, running) created by main thread at:
+    #0 pthread_create <null> (pth_pi_busy1+0x000000422346)
+    #1 main <null> (pth_pi_busy1+0x0000004a217c)
+
+SUMMARY: ThreadSanitizer: data race (/home/ganesh/cs4230/pthreads/Pi/pth_pi_busy1+0x4a2725) in Thread_sum
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=5408)
+  Write of size 8 at 0x0000014ace88 by thread T2:
+    #0 Thread_sum <null> (pth_pi_busy1+0x0000004a2776)
+
+  Previous write of size 8 at 0x0000014ace88 by thread T1:
+    #0 Thread_sum <null> (pth_pi_busy1+0x0000004a2776)
+
+  Location is global '<null>' at 0x000000000000 (pth_pi_busy1+0x0000014ace88)
+
+  Thread T2 (tid=5411, running) created by main thread at:
+    #0 pthread_create <null> (pth_pi_busy1+0x000000422346)
+    #1 main <null> (pth_pi_busy1+0x0000004a217c)
+
+  Thread T1 (tid=5410, running) created by main thread at:
+    #0 pthread_create <null> (pth_pi_busy1+0x000000422346)
+    #1 main <null> (pth_pi_busy1+0x0000004a217c)
+
+SUMMARY: ThreadSanitizer: data race (/home/ganesh/cs4230/pthreads/Pi/pth_pi_busy1+0x4a2776) in Thread_sum
+==================
+With n = 1000000 terms,
+   Multi-threaded estimate of pi  = 3.141591653589772
+   Elapsed time = 6.146332e+00 seconds
+   Single-threaded estimate of pi = 3.141591653589774
+   Elapsed time = 1.380801e-02 seconds
+   Math library estimate of pi    = 3.141592653589793
+ThreadSanitizer: reported 2 warnings
+ganesh@fractus:~/cs4230/pthreads/Pi$
+

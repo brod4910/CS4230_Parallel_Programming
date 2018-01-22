@@ -1,0 +1,91 @@
+  642  h
+ganesh@fractus:~/cs4230/pthreads/Pi$ clang pth_pi_busy2.c -lpthread  -fsanitize=thread -o pth_pi_busy2
+ganesh@fractus:~/cs4230/pthreads/Pi$ ./pth_pi_busy2 4 1000000
+==================
+WARNING: ThreadSanitizer: data race (pid=5394)
+  Read of size 4 at 0x0000014ace90 by thread T2:
+    #0 Thread_sum <null> (pth_pi_busy2+0x0000004a2786)
+
+  Previous write of size 4 at 0x0000014ace90 by thread T1:
+    #0 Thread_sum <null> (pth_pi_busy2+0x0000004a2820)
+
+  Location is global '<null>' at 0x000000000000 (pth_pi_busy2+0x0000014ace90)
+
+  Thread T2 (tid=5397, running) created by main thread at:
+    #0 pthread_create <null> (pth_pi_busy2+0x000000422346)
+    #1 main <null> (pth_pi_busy2+0x0000004a217c)
+
+  Thread T1 (tid=5396, finished) created by main thread at:
+    #0 pthread_create <null> (pth_pi_busy2+0x000000422346)
+    #1 main <null> (pth_pi_busy2+0x0000004a217c)
+
+SUMMARY: ThreadSanitizer: data race (/home/ganesh/cs4230/pthreads/Pi/pth_pi_busy2+0x4a2786) in Thread_sum
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=5394)
+  Write of size 8 at 0x0000014ace88 by thread T2:
+    #0 Thread_sum <null> (pth_pi_busy2+0x0000004a27c2)
+
+  Previous write of size 8 at 0x0000014ace88 by thread T1:
+    #0 Thread_sum <null> (pth_pi_busy2+0x0000004a27c2)
+
+  Location is global '<null>' at 0x000000000000 (pth_pi_busy2+0x0000014ace88)
+
+  Thread T2 (tid=5397, running) created by main thread at:
+    #0 pthread_create <null> (pth_pi_busy2+0x000000422346)
+    #1 main <null> (pth_pi_busy2+0x0000004a217c)
+
+  Thread T1 (tid=5396, finished) created by main thread at:
+    #0 pthread_create <null> (pth_pi_busy2+0x000000422346)
+    #1 main <null> (pth_pi_busy2+0x0000004a217c)
+
+SUMMARY: ThreadSanitizer: data race (/home/ganesh/cs4230/pthreads/Pi/pth_pi_busy2+0x4a27c2) in Thread_sum
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=5394)
+  Read of size 4 at 0x0000014ace90 by thread T3:
+    #0 Thread_sum <null> (pth_pi_busy2+0x0000004a2786)
+
+  Previous write of size 4 at 0x0000014ace90 by thread T1:
+    #0 Thread_sum <null> (pth_pi_busy2+0x0000004a2820)
+
+  Location is global '<null>' at 0x000000000000 (pth_pi_busy2+0x0000014ace90)
+
+  Thread T3 (tid=5398, running) created by main thread at:
+    #0 pthread_create <null> (pth_pi_busy2+0x000000422346)
+    #1 main <null> (pth_pi_busy2+0x0000004a217c)
+
+  Thread T1 (tid=5396, finished) created by main thread at:
+    #0 pthread_create <null> (pth_pi_busy2+0x000000422346)
+    #1 main <null> (pth_pi_busy2+0x0000004a217c)
+
+SUMMARY: ThreadSanitizer: data race (/home/ganesh/cs4230/pthreads/Pi/pth_pi_busy2+0x4a2786) in Thread_sum
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=5394)
+  Read of size 4 at 0x0000014ace90 by thread T4:
+    #0 Thread_sum <null> (pth_pi_busy2+0x0000004a2786)
+
+  Previous write of size 4 at 0x0000014ace90 by thread T1:
+    #0 Thread_sum <null> (pth_pi_busy2+0x0000004a2820)
+
+  Location is global '<null>' at 0x000000000000 (pth_pi_busy2+0x0000014ace90)
+
+  Thread T4 (tid=5399, running) created by main thread at:
+    #0 pthread_create <null> (pth_pi_busy2+0x000000422346)
+    #1 main <null> (pth_pi_busy2+0x0000004a217c)
+
+  Thread T1 (tid=5396, finished) created by main thread at:
+    #0 pthread_create <null> (pth_pi_busy2+0x000000422346)
+    #1 main <null> (pth_pi_busy2+0x0000004a217c)
+
+SUMMARY: ThreadSanitizer: data race (/home/ganesh/cs4230/pthreads/Pi/pth_pi_busy2+0x4a2786) in Thread_sum
+==================
+With n = 1000000 terms,
+   Multi-threaded estimate of pi  = 3.141591653589781
+   Elapsed time = 9.644079e-02 seconds
+   Single-threaded estimate of pi = 3.141591653589774
+   Elapsed time = 1.183701e-02 seconds
+   Math library estimate of pi    = 3.141592653589793
+ThreadSanitizer: reported 4 warnings
+ganesh@fractus:~/cs4230/pthreads/Pi$

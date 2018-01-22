@@ -1,0 +1,14 @@
+Here is an experiment you can do with bPc.c
+
+1) Copy it over to a CADE machine such as lab1-40.eng.utah.edu
+2) There, type gcc -o bPc bPc.c -lpthread -lm
+3) Type "time ./bPc 1000000000 1 &" and immediately type top
+4) When the CPU % drops to a low value, quit out of top (type "q")
+5) Repeat by typing "time ./bPc 1000000000 2&" and repeat the above
+6) The last arg here is the # of threads. So now type "time ./bPc 1000000000 4"
+7) Go up to the # of threads being 8
+8) Notice that in "top", the CPU percentage goes up to a number close to 800
+   and then it drop
+9) Of course, things must be finishing faster as well.
+
+Hope you had fun doing this Pthread execution.

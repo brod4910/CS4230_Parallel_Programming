@@ -1,0 +1,24 @@
+./iP 1000000000 4 3
+Segmentation fault (core dumped)
+ganesh@fractus:~/cs4230/pthreads/Primes$
+above is w/o asan
+
+--
+one less 0 and fine!
+--
+
+clang iP.c -lpthread -lm -fsanitize=address -o iP
+
+
+ganesh@fractus:~/cs4230/pthreads/Primes$ ./iP 1000000000 4 3
+ASAN:DEADLYSIGNAL
+=================================================================
+==5083==ERROR: AddressSanitizer: SEGV on unknown address 0x000019106000 (pc 0x0000004ea29d bp 0x7ffc9d19ea00 sp 0x7ffc9d19e860 T0)
+    #0 0x4ea29c  (/home/ganesh/cs4230/pthreads/Primes/iP+0x4ea29c)
+    #1 0x7f5b98b1882f  (/lib/x86_64-linux-gnu/libc.so.6+0x2082f)
+    #2 0x418578  (/home/ganesh/cs4230/pthreads/Primes/iP+0x418578)
+
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV (/home/ganesh/cs4230/pthreads/Primes/iP+0x4ea29c) 
+==5083==ABORTING
+ganesh@fractus:~/cs4230/pthreads/Primes$
