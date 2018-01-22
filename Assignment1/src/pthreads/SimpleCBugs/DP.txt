@@ -1,3 +1,5 @@
+No errors here. Both of the bugs were fixed.
+
 bash-4.2$ g++ PThreadDP.c
 bash-4.2$   valgrind --leak-check=yes ./a.out
 ==7661== Memcheck, a memory error detector

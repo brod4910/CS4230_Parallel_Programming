@@ -1,3 +1,6 @@
+Busy1 allows for all threads created to act upon the total sum. Meaning that whenever a thread is created they are allowed to modify the global sum in anyway they please.
+
+
 bash-4.2$ valgrind --tool=drd --read-var-info=yes ./a.out
 ==8478== drd, a thread error detector
 ==8478== Copyright (C) 2006-2017, and GNU GPL'd, by Bart Van Assche.

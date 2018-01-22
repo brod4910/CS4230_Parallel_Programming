@@ -1,3 +1,5 @@
+This happens because we never multiplied Size by sizeof(int). Meaning that we only allocated Size bytes and when we do reads and writes past our allocated block size we get this error.
+
 brians-mbp-4:SimpleCBugs brianrodriguez$ ./a.out
 Please provide Exp for array sizes and threshold sep by a comma
 3,8

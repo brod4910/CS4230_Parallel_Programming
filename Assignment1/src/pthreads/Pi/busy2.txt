@@ -1,3 +1,6 @@
+Busy2 happens because although the threads are more contained and do not act on the total sum in choas. Threads are still allowed to modify sum after they have completed their summations.
+
+
 bash-4.2$ gcc -lpthread pth_pi_busy2.c
 bash-4.2$ valgrind --tool=drd --read-var-info=yes ./a.out 4 1000000
 ==8666== drd, a thread error detector

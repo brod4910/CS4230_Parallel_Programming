@@ -1,0 +1,40 @@
+I could not do a memcheck on my machine. Memory consumption halted my computer as the stack got bigger.
+In iPnl there are not locks that prevent the bases from being changed under each thread that is made.
+
+
+brians-mbp-4:Primes brianrodriguez$ valgrind --tool=drd --read-var-info=yes ./iPr
+==42456== drd, a thread error detector
+==42456== Copyright (C) 2006-2017, and GNU GPL'd, by Bart Van Assche.
+==42456== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==42456== Command: ./iPr
+==42456==
+--42456-- run: /usr/bin/dsymutil "./iPr"
+warning: no debug symbols in executable (-arch x86_64)
+
+drd: ./drd_thread.c:753 (void vgDrd_thread_set_vg_running_tid(const ThreadId)): Assertion 'vg_tid != VG_INVALID_THREADID' failed.
+
+host stacktrace:
+==42456==    at 0x25801EED8: ???
+==42456==    by 0x25801F234: ???
+==42456==    by 0x25801F217: ???
+==42456==    by 0x25800A2BE: ???
+==42456==    by 0x25800FFF1: ???
+==42456==    by 0x258026B4D: ???
+==42456==    by 0x258025803: ???
+
+sched status:
+  running_tid=0
+
+Thread 1: status = VgTs_Init (lwpid 0)
+Segmentation fault: 11
+
+brians-mbp-4:Primes brianrodriguez$ valgrind ./iPr
+==43000== Memcheck, a memory error detector
+==43000== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==43000== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==43000== Command: ./iPr
+==43000==
+==43000== Warning: set address range perms: large range [0x100002000, 0x117d7a000) (defined)
+==43000== Warning: set address range perms: large range [0x7b0000000000, 0x7c0000003000) (noaccess)
+==43000== Warning: set address range perms: large range [0x8000000000, 0x10000000000) (noaccess)
+==43000== Warning: set address range perms: large range [0x200000000000, 0x300000000000) (noaccess)

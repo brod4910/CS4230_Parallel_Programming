@@ -17,9 +17,11 @@ typedef struct {
 float *A;
 float *B;
 float *C;
+double result;
+int tid = 0;
 
-pthread_t id[MAX_THREADS];
-pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+pthread_t id[50];
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void Usage(char *prog_name) {
    fprintf(stderr, "usage: %s <Exp>:int <Thres>:int\n", prog_name);
@@ -40,8 +42,8 @@ void serdp(RNG rng) {
     C[i] = A[i] * B[i];
 }
 
-void pdp(RNG myrng) {
-  RNG rng = myrng;
+void* pdp(void* myrng) {
+  RNG rng = (RNG*)myrng;
   if ((rng.H - rng.L) <= Thres) {
     serdp(rng);
   }
@@ -54,12 +56,28 @@ void pdp(RNG myrng) {
     rngL.H = rng.L + (rng.H - rng.L)/2;
     rngH.L = rngL.H+1;
 
+    pthread_mutex_lock(&mutex);
+
     printf("--> creating thread for range %d %d\n", rngL.L, rngL.H);
-    p_thread_create( , NULL, (void*)pdp, (void*)rngL);
+    pthread_create(&id[tid], NULL, (void*) pdp, rngL);
+
+    tid++;
+    pthread_mutex_unlock(&mutex);
     
-    printf("--> creating thread for range %d %d\n", rngH.L, rngH.H);    
-    p_thread_create( , NULL, (void*)pdp, (void*)rngH);
+    pthread_mutex_lock(&mutex);
+
+    printf("--> creating thread for range %d %d\n", rngH.L, rngH.H);   
+
+    pthread_create(&id[tid], NULL, (void*) pdp, rngH);
+
+    tid++;
+    pthread_mutex_unlock(&mutex);
   }
+}
+
+void do_pdp(RNG myrng)
+{
+  pthread_create(&id[tid++], NULL, (void*) pdp, myrng);
 }
 
 int get_nprocs_conf(void);
@@ -100,14 +118,18 @@ int main(int argc, char **argv) {
     C[i]=0;
   }
   //printf("Parallel DP = %f\n", pdp(rng));
-  pdp(rng);
+  do_pdp(rng);
 
   printf("Final C is\n");
   for(int i=0; i<Size; ++i) {
-    printf("%f\n", (double) C[i]);
+    result += C[i];
   }  
+
+  printf("%f\n", result);
 
   free(A);
   free(B);
   free(C);
+
+  return 0;
 }

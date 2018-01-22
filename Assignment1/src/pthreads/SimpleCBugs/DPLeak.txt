@@ -1,3 +1,6 @@
+This happens because we did not free the 3 arrays that we allocated.
+
+
 bash-4.2$ g++ PThreadDPLeak.c
 bash-4.2$   valgrind --leak-check=yes a.out
 valgrind: a.out: command not found

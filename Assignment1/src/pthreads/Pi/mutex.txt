@@ -1,3 +1,5 @@
+All of the previous bugs were fixed and a mutex was added to prevent a data race.
+
 bash-4.2$ gcc -lpthread pth_pi_mutex.c
 bash-4.2$ valgrind --tool=drd --read-var-info=yes ./a.out 4 1000000
 ==8719== drd, a thread error detector
