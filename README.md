@@ -16,6 +16,17 @@ If you have setup Automation as described [here](https://sites.google.com/view/c
 
 They typing ```cade``` in you terminal will do the following
 
+## Supported Operating Systems
+
+This code in this class repository is tested only on Linux machines.
+Currently we do not support any pro.pri.e.tary , closed source, slow
+and buggy operating systems like Microsoft Windows or 
+expensive and unconfigurable operating systems like Apple macOS.
+
+If you unfortunately only use such machines, for reasons that are 
+most likely flawed, you need to login to a machine that runs Linux.
+for example, you could login into the following.
+
 ## CADE Login
 
 ```$ cade```
