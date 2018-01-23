@@ -1,8 +1,9 @@
 # CS 4230 Parallel Programming
 
-## Clone Recursive
+## Fork
 
-`git clone --recursive git@gitlab.com:vinutah/CS_4230.git`
+There is a button on this page that says `Fork`
+Please fork this repository and add your work into that.
 
 ## Important Links
 
