@@ -17,8 +17,8 @@ typedef struct {
 float *A;
 float *B;
 float *C;
-double result;
-int tid = 0;
+float result = 0;
+int tid = 1;
 
 pthread_t id[50];
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -43,7 +43,7 @@ void serdp(RNG rng) {
 }
 
 void* pdp(void* myrng) {
-  RNG rng = (RNG*)myrng;
+  RNG rng = *(RNG*)myrng;
   if ((rng.H - rng.L) <= Thres) {
     serdp(rng);
   }
@@ -56,40 +56,51 @@ void* pdp(void* myrng) {
     rngL.H = rng.L + (rng.H - rng.L)/2;
     rngH.L = rngL.H+1;
 
-    pthread_mutex_lock(&mutex);
-
     printf("--> creating thread for range %d %d\n", rngL.L, rngL.H);
-    pthread_create(&id[tid], NULL, (void*) pdp, rngL);
 
-    tid++;
-    pthread_mutex_unlock(&mutex);
+    pthread_create(&id[tid++], NULL, &pdp, &rngL);
     
-    pthread_mutex_lock(&mutex);
+    printf("--> creating thread for range %d %d\n", rngH.L, rngH.H);
 
-    printf("--> creating thread for range %d %d\n", rngH.L, rngH.H);   
+    pthread_create(&id[tid++], NULL, &pdp, &rngH);
+  }
+}
 
-    pthread_create(&id[tid], NULL, (void*) pdp, rngH);
+void* pdp(void* rng)
+{
+  RNG rng = *(RNG*)myrng;
 
-    tid++;
-    pthread_mutex_unlock(&mutex);
+  if((rng.H - rng.L) > Thres)
+  {
+    RNG rngL = rng;
+    RNG rngH = rng;
+
+    rngL.H = rng.L + (rng.H - rng.L)/2;
+    rngH.L = rngL.H+1;
+
+
   }
 }
 
 void do_pdp(RNG myrng)
 {
-  pthread_create(&id[tid++], NULL, (void*) pdp, myrng);
+  printf("--> creating thread for range %d %d\n", myrng.L, myrng.H);
+  if(!pthread_create(&id[tid++], NULL, &pdp, &myrng))
+  {
+    printf("%s\n", "ERROR");
+  }
 }
 
-int get_nprocs_conf(void);
-int get_nprocs(void);
+// int get_nprocs_conf(void);
+// int get_nprocs(void);
 
 int main(int argc, char **argv) {
   // Turn this on on Linux systems
   // On Mac, it does not work
-  printf("This system has\
-          %d processors configured and\
-  	      %d processors available.\n",
-          get_nprocs_conf(), get_nprocs());
+  // printf("This system has\
+  //         %d processors configured and\
+  // 	      %d processors available.\n",
+  //         get_nprocs_conf(), get_nprocs());
   
   Get_args(argc, argv);  
   int Size = (int) pow(2, Exp);
