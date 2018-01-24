@@ -6,7 +6,8 @@
 #include <time.h>
 
 const long MAX_EXP = 32;
-const int MAX_THREADS = 50;
+const int MAX_THREADS = 1024;
+int Size;
 int Exp, Thres;
 
 typedef struct {
@@ -53,34 +54,60 @@ void serdp(RNG rng)
   pthread_mutex_unlock(&mutex);
 }
 
-void* pdp(void* myrng) 
+// void* pdp(void* myrng) 
+// {
+//   RNG rng = *(RNG*)myrng;
+
+//   if ((rng.H - rng.L) <= Thres) 
+//   {
+//     serdp(rng);
+//   }
+//   else 
+//   {
+//     printf("-> rng.L and rng.H are %d %d\n", rng.L, rng.H);
+    
+//     RNG rngL = rng;
+//     RNG rngH = rng;
+    
+//     rngL.H = rng.L + (rng.H - rng.L)/2;
+//     rngH.L = rngL.H+1;
+
+//     pthread_mutex_lock(&mutex);
+//     printf("--> creating thread for range %d %d\n", rngL.L, rngL.H);
+//     pthread_create(&id[tid++], NULL, &pdp, (void*)&rngL);
+//     pthread_mutex_unlock(&mutex);
+    
+//     pthread_mutex_lock(&mutex);
+//     printf("--> creating thread for range %d %d\n", rngH.L, rngH.H);    
+//     pthread_create(&id[tid++], NULL, &pdp, (void*)&rngH);
+//     pthread_mutex_unlock(&mutex);
+//   }
+// }
+
+void* pdp(void* oldrng)
 {
-  RNG rng = *(RNG*)myrng;
+  RNG rng = *(RNG*)oldrng;
 
-  if ((rng.H - rng.L) <= Thres) 
+  if(rng.L < rng.H)
   {
-    serdp(rng);
-  }
-  else 
-  {
-    printf("-> rng.L and rng.H are %d %d\n", rng.L, rng.H);
-    
-    RNG rngL = rng;
-    RNG rngH = rng;
-    
-    rngL.H = rng.L + (rng.H - rng.L)/2;
-    rngH.L = rngL.H+1;
+    printf("%d:%d\n", rng.L, rng.H);
 
-    pthread_mutex_lock(&mutex);
-    printf("--> creating thread for range %d %d\n", rngL.L, rngL.H);
-    pthread_create(&id[tid++], NULL, &pdp, (void*)&rngL);
-    pthread_mutex_unlock(&mutex);
-    
-    pthread_mutex_lock(&mutex);
-    printf("--> creating thread for range %d %d\n", rngH.L, rngH.H);    
-    pthread_create(&id[tid++], NULL, &pdp, (void*)&rngH);
-    pthread_mutex_unlock(&mutex);
-  }
+    for(int i = rng.L; i <= rng.H;++i)
+    {
+      C[i] = A[i] * B[i];
+    }
+
+    RNG* newrng = (RNG*)malloc(sizeof(RNG));
+    newrng->L = rng.H + 1;
+    newrng->H = newrng->L + Thres;
+
+    if(newrng->H >= (Size-1))
+    {
+      newrng->H = Size-1;
+    }
+      printf("--> creating thread for range %d %d\n", newrng->L, newrng->H);
+      pthread_create(&id[tid++], NULL, &pdp, (void*)newrng);
+    }
 }
 
 void do_pdp(RNG rng)
@@ -89,7 +116,7 @@ void do_pdp(RNG rng)
 
   pthread_create(&id[tid++], NULL, &pdp, (void*)&rng);
 
-  nanosleep((const struct timespec[]){{0, 500000000L}}, NULL);
+  nanosleep((const struct timespec[]){{1, 0L}}, NULL);
 
   for(int i = 0; i < tid; ++i)
   {
@@ -110,7 +137,7 @@ int main(int argc, char **argv) {
   //         get_nprocs_conf(), get_nprocs());
   
   Get_args(argc, argv);  
-  int Size = (int) pow(2, Exp);
+  Size = (int) pow(2, Exp);
   printf("Will do DP of %d sized arrays\n", Size);
 
   A = (float *) malloc(Size*sizeof(float));
@@ -127,7 +154,7 @@ int main(int argc, char **argv) {
 
   RNG rng;
   rng.L = 0;
-  rng.H = Size-1;
+  rng.H = Thres;
   //printf("Serial dot product is %f\n", serdp(rng));
   
   printf("Now invoking parallel dot product\n");
