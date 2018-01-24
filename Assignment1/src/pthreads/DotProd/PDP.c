@@ -3,25 +3,31 @@
 #include <pthread.h> 
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 const long MAX_EXP = 32;
-int Exp, Thres;
 const int MAX_THREADS = 50;
+int Exp, Thres;
 
 typedef struct {
   int L;
   int H;
 } RNG;
 
+
 // Global arrays over which DP is done
 float *A;
 float *B;
 float *C;
-float result = 0;
-int tid = 1;
+float result;
 
-pthread_t id[50];
+// lock for the shared variable nextbase
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
+// ID structs for the threads
+pthread_t id[MAX_THREADS];
+
+int tid = 0;
 
 void Usage(char *prog_name) {
    fprintf(stderr, "usage: %s <Exp>:int <Thres>:int\n", prog_name);
@@ -37,17 +43,26 @@ void Get_args(int argc, char **argv) {
    if (Thres < 1 || Thres >= (int) pow(2, Exp)) Usage(argv[0]);
 }  
 
-void serdp(RNG rng) {
-  for(int i=rng.L; i<=rng.H; ++i) 
+void serdp(RNG rng) 
+{
+  pthread_mutex_lock(&mutex);
+  for(int i=rng.L; i<=rng.H; ++i)
+  {
     C[i] = A[i] * B[i];
+  }
+  pthread_mutex_unlock(&mutex);
 }
 
-void* pdp(void* myrng) {
+void* pdp(void* myrng) 
+{
   RNG rng = *(RNG*)myrng;
-  if ((rng.H - rng.L) <= Thres) {
+
+  if ((rng.H - rng.L) <= Thres) 
+  {
     serdp(rng);
   }
-  else {
+  else 
+  {
     printf("-> rng.L and rng.H are %d %d\n", rng.L, rng.H);
     
     RNG rngL = rng;
@@ -56,38 +71,30 @@ void* pdp(void* myrng) {
     rngL.H = rng.L + (rng.H - rng.L)/2;
     rngH.L = rngL.H+1;
 
+    pthread_mutex_lock(&mutex);
     printf("--> creating thread for range %d %d\n", rngL.L, rngL.H);
-
-    pthread_create(&id[tid++], NULL, &pdp, &rngL);
+    pthread_create(&id[tid++], NULL, &pdp, (void*)&rngL);
+    pthread_mutex_unlock(&mutex);
     
-    printf("--> creating thread for range %d %d\n", rngH.L, rngH.H);
-
-    pthread_create(&id[tid++], NULL, &pdp, &rngH);
+    pthread_mutex_lock(&mutex);
+    printf("--> creating thread for range %d %d\n", rngH.L, rngH.H);    
+    pthread_create(&id[tid++], NULL, &pdp, (void*)&rngH);
+    pthread_mutex_unlock(&mutex);
   }
 }
 
-void* pdp(void* rng)
+void do_pdp(RNG rng)
 {
-  RNG rng = *(RNG*)myrng;
+  printf("--> creating thread for range %d %d\n", rng.L, rng.H);
 
-  if((rng.H - rng.L) > Thres)
+  pthread_create(&id[tid++], NULL, &pdp, (void*)&rng);
+
+  nanosleep((const struct timespec[]){{0, 500000000L}}, NULL);
+
+  for(int i = 0; i < tid; ++i)
   {
-    RNG rngL = rng;
-    RNG rngH = rng;
-
-    rngL.H = rng.L + (rng.H - rng.L)/2;
-    rngH.L = rngL.H+1;
-
-
-  }
-}
-
-void do_pdp(RNG myrng)
-{
-  printf("--> creating thread for range %d %d\n", myrng.L, myrng.H);
-  if(!pthread_create(&id[tid++], NULL, &pdp, &myrng))
-  {
-    printf("%s\n", "ERROR");
+    pthread_join(id[i], NULL);
+    printf("%d\n", i);
   }
 }
 
@@ -99,7 +106,7 @@ int main(int argc, char **argv) {
   // On Mac, it does not work
   // printf("This system has\
   //         %d processors configured and\
-  // 	      %d processors available.\n",
+  //         %d processors available.\n",
   //         get_nprocs_conf(), get_nprocs());
   
   Get_args(argc, argv);  
@@ -133,14 +140,13 @@ int main(int argc, char **argv) {
 
   printf("Final C is\n");
   for(int i=0; i<Size; ++i) {
+    // printf("%f\n", (double) C[i]);
     result += C[i];
-  }  
+  }
 
-  printf("%f\n", result);
+  printf("%s%f\n", "Final Result: ", result);
 
   free(A);
   free(B);
   free(C);
-
-  return 0;
 }
