@@ -46,84 +46,131 @@ void Get_args(int argc, char **argv) {
 
 void serdp(RNG rng) 
 {
-  pthread_mutex_lock(&mutex);
   for(int i=rng.L; i<=rng.H; ++i)
   {
     C[i] = A[i] * B[i];
   }
-  pthread_mutex_unlock(&mutex);
 }
 
-// void* pdp(void* myrng) 
-// {
-//   RNG rng = *(RNG*)myrng;
-
-//   if ((rng.H - rng.L) <= Thres) 
-//   {
-//     serdp(rng);
-//   }
-//   else 
-//   {
-//     printf("-> rng.L and rng.H are %d %d\n", rng.L, rng.H);
-    
-//     RNG rngL = rng;
-//     RNG rngH = rng;
-    
-//     rngL.H = rng.L + (rng.H - rng.L)/2;
-//     rngH.L = rngL.H+1;
-
-//     pthread_mutex_lock(&mutex);
-//     printf("--> creating thread for range %d %d\n", rngL.L, rngL.H);
-//     pthread_create(&id[tid++], NULL, &pdp, (void*)&rngL);
-//     pthread_mutex_unlock(&mutex);
-    
-//     pthread_mutex_lock(&mutex);
-//     printf("--> creating thread for range %d %d\n", rngH.L, rngH.H);    
-//     pthread_create(&id[tid++], NULL, &pdp, (void*)&rngH);
-//     pthread_mutex_unlock(&mutex);
-//   }
-// }
-
-void* pdp(void* oldrng)
+void* pdp(void* myrng) 
 {
-  RNG rng = *(RNG*)oldrng;
+  RNG rng = *(RNG*)myrng;
+  // variables to join threads after they have been created
+  int k,j;
 
-  if(rng.L < rng.H)
+  if ((rng.H - rng.L) <= Thres) 
   {
-    printf("%d:%d\n", rng.L, rng.H);
+    serdp(rng);
+  }
+  else 
+  {
+    printf("-> rng.L and rng.H are %d %d\n", rng.L, rng.H);
+    
+    RNG rngL = rng;
+    RNG rngH = rng;
+    
+    rngL.H = rng.L + (rng.H - rng.L)/2;
+    rngH.L = rngL.H+1;
 
-    for(int i = rng.L; i <= rng.H;++i)
-    {
-      C[i] = A[i] * B[i];
-    }
+    // critical section. create a thread then increment the thread id
+    // set the variable to join the thread after it is created.
+    pthread_mutex_lock(&mutex);
+    k = tid + 1;
+    printf("--> creating thread for range %d %d\n", rngL.L, rngL.H);
+    pthread_create(&id[tid++], NULL, &pdp, (void*)&rngL);
+    pthread_mutex_unlock(&mutex);
+    
+    // critical section. create a thread then increment the thread id
+    // set the variable to join the thread after it is created.
+    pthread_mutex_lock(&mutex);
+    j = tid + 1;
+    printf("--> creating thread for range %d %d\n", rngH.L, rngH.H);    
+    pthread_create(&id[tid++], NULL, &pdp, (void*)&rngH);
+    pthread_mutex_unlock(&mutex);
 
-    RNG* newrng = (RNG*)malloc(sizeof(RNG));
-    newrng->L = rng.H + 1;
-    newrng->H = newrng->L + Thres;
-
-    if(newrng->H >= (Size-1))
-    {
-      newrng->H = Size-1;
-    }
-      printf("--> creating thread for range %d %d\n", newrng->L, newrng->H);
-      pthread_create(&id[tid++], NULL, &pdp, (void*)newrng);
-    }
+    // join both threads after the work has been finished
+    pthread_join(id[k], NULL);
+    pthread_join(id[j], NULL);
+  }
 }
 
+/*
+ * Driver method for doing parallel dot product
+ */
 void do_pdp(RNG rng)
 {
   printf("--> creating thread for range %d %d\n", rng.L, rng.H);
+  // set variable to join the thread after it has finished work
+  int t = tid;
 
+  // create the thread to do the work.
   pthread_create(&id[tid++], NULL, &pdp, (void*)&rng);
 
-  nanosleep((const struct timespec[]){{1, 0L}}, NULL);
+  // join the thread after the calls have been made
+  pthread_join(id[t], NULL);
+}
+
+/*
+ * Reduces the final array in parallel
+ */
+void* reduce(void* rng)
+{
+  RNG myrng = *(RNG*)rng;
+
+  // printf("--> reducing between: %d %d\n", myrng.L, myrng.H);
+
+  for(int i = myrng.L; i <= myrng.H;i++)
+  {
+      pthread_mutex_lock(&mutex);
+      result += C[i];
+      pthread_mutex_unlock(&mutex);
+      // printf("%f\n", C[i]);
+  }
+}
+
+/*
+ * Driver method for doing parallel reduce
+ */
+void do_reduce(RNG rng, int reduction)
+{
+  RNG *splits = (RNG*)malloc(sizeof(RNG) * reduction);
+
+  // set up the initial work
+  RNG work;
+  work.L = rng.L;
+  work.H = rng.H / reduction;
+  splits[0] = work;
+
+  int mult = 2;
+
+  for(int i = 1; i < reduction; ++i)
+  {
+    printf("--> reducing between: %d %d\n", work.L, work.H);
+    
+    work.L = work.H + 1;
+    work.H = ((Size) / reduction) * mult;
+
+    if(work.H >= (Size-1))
+    {
+      work.H = Size - 1;
+    }
+
+    splits[i] = work;
+  }
+  
+  for(int i = 0; i < reduction; ++i)
+  {
+    pthread_create(&id[i++], NULL, &reduce, (void*)&splits[i]);
+  }
 
   for(int i = 0; i < tid; ++i)
   {
     pthread_join(id[i], NULL);
-    printf("%d\n", i);
   }
+
+  free(splits);
 }
+
 
 // int get_nprocs_conf(void);
 // int get_nprocs(void);
@@ -154,7 +201,7 @@ int main(int argc, char **argv) {
 
   RNG rng;
   rng.L = 0;
-  rng.H = Thres;
+  rng.H = Size-1;
   //printf("Serial dot product is %f\n", serdp(rng));
   
   printf("Now invoking parallel dot product\n");
@@ -166,10 +213,19 @@ int main(int argc, char **argv) {
   do_pdp(rng);
 
   printf("Final C is\n");
-  for(int i=0; i<Size; ++i) {
+
+  tid = 0;
+
+  // do_reduce(rng, 2);
+  // printf("%s%f\n", "Parallel C is: ", result);
+
+  result = 0;
+  for(int i=0; i<Size; ++i) 
+  {
     // printf("%f\n", (double) C[i]);
     result += C[i];
   }
+
 
   printf("%s%f\n", "Final Result: ", result);
 
