@@ -1,0 +1,37 @@
+
+Grader: Ganesh:
+Overall comments:
+
+* Found the PDF in the "wrong" directory - phew
+ 
+Points Awarded: 98
+
+---
+
+Q1: Good summary. Did you see the power equations? We'll discuss
+    it in class.
+
+Q2: Good survey of concepts. 
+
+Q3: You are converting the energy in a pizza to "wattage left over"?
+    That is a bit non-kosher, as the 4234.7 Watts of power has to
+    be now left over a period of time. You are also calculationg the
+    total watts in a Pizza? Anyway, good that you went thru some of
+    the units. A common confusion in this area is between energy
+    and power (and I'm sure you know the difference; maybe a typo
+    in your answer).
+
+Q4: Very good that you drilled deep into this talk and got its gist. Kudos!
+
+
+Q5: Very good understanding again!
+
+
+Q6: Good aspects of his talk well summarized!
+
+
+Q7: Great that you picked up on the variadic template. Great job.
+
+---
+
+    
