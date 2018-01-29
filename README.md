@@ -92,3 +92,25 @@ Hello from thread 4 of 5
 Hello from thread 3 of 5
 Hello from thread 1 of 5
 `
+
+## TBB
+
+`
+$ cd lib
+$ git clone https://github.com/01org/tbb.git
+$ cd tbb
+$ unalias make
+$ make
+$ ln -s build/linux_intel64_gcc_cc<version>_libc<version>_kernel<version>_release/ lib
+`
+### Run
+
+`
+cd ~/CS_4230/src/tbb/
+source ~/CS_4230/dotcshrc
+make SRC=primes3_w_vec PARLIB=tbb CC=g++
+`
+
+
+
+
