@@ -1,14 +1,18 @@
 # Compiler
 CC 			:= gcc
 
+ifeq ($(CC), gcc)
+STANDARD := -std=c99
 LANG_EXT := c
+endif
 
 ifeq ($(CC), g++)
+STANDARD := -std=c++11
 LANG_EXT := cpp
 endif
 
 # Compiler Options
-CC_OPTS		:=-std=c99 -g -Wa,-a,-ad
+CC_OPTS	:= $(STANDARD) -g -Wa,-a,-ad
 
 # TODO Separate this into different file
 # TODO Document these
@@ -25,7 +29,6 @@ W_OPTS		:= -Wno-variadic-macros \
 -Wsync-nand \
 -Wtrampolines \
 -Wsign-compare \
--Werror=float-equal \
 -Werror=missing-braces \
 -Werror=init-self \
 -Werror=logical-op \
@@ -57,7 +60,10 @@ W_OPTS		:= -Wno-variadic-macros \
 
 INC_PATH_1 := .
 INC_PATH_2 := $(CS_4230_INCLUDE)
-INC_PATH := -I$(INC_PATH_1) -I$(INC_PATH_2)
+INC_PATH_3 := $(CS_4230_HOME)/lib/tbb-tbb_2018/include/
+INC_PATH := -I$(INC_PATH_1) -I$(INC_PATH_2) -I$(INC_PATH_3)
+
+LIB_PATH := -L$(CS_4230_HOME)/lib/tbb-tbb_2018/build/linux_intel64_gcc_cc5.4.1_libc2.23_kernel4.13.0_release/
 
 SANITIZER :=
 LMATH := -lm
@@ -69,12 +75,15 @@ ifeq (${PARLIB}, openmp)
 OPENMP := -fopenmp
 endif
 
+ifeq (${PARLIB}, tbb)
+TBB := -ltbb
+endif
+
 LINK_OPTS := $(LPTHREAD) $(LMATH)
 
 CC_OPTIM  	:= -O0
 
 .PHONY: deploy check-env build clean help run check
-
 
 all: deploy compile decompile
 
@@ -93,8 +102,8 @@ compile:
 	@echo " "
 	@echo " "
 	$(CC) $(CC_OPTS) $(CC_OPTIM) $(W_OPTS) \
-		$(INC_PATH) $(OPENMP) -o $(SRC).exe $(SRC).$(LANG_EXT) \
-		$(SANITIZER) $(LINK_OPTS)  > $(SRC).lst
+		$(INC_PATH) $(LIB_PATH) $(OPENMP) -o $(SRC).exe $(SRC).$(LANG_EXT) \
+		$(SANITIZER) $(LINK_OPTS) $(TBB) > $(SRC).lst
 	@echo " "
 	@echo "Done."
 	@echo " "
