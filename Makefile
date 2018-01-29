@@ -60,10 +60,10 @@ W_OPTS		:= -Wno-variadic-macros \
 
 INC_PATH_1 := .
 INC_PATH_2 := $(CS_4230_INCLUDE)
-INC_PATH_3 := $(CS_4230_HOME)/lib/tbb-tbb_2018/include/
+INC_PATH_3 := $(CS_4230_HOME)/lib/tbb/include/
 INC_PATH := -I$(INC_PATH_1) -I$(INC_PATH_2) -I$(INC_PATH_3)
 
-LIB_PATH := -L$(CS_4230_HOME)/lib/tbb-tbb_2018/build/linux_intel64_gcc_cc5.4.1_libc2.23_kernel4.13.0_release/
+LIB_PATH := -L$(CS_4230_HOME)/lib/tbb/lib/
 
 SANITIZER :=
 LMATH := -lm
