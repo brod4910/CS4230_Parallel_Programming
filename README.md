@@ -99,7 +99,7 @@ Hello from thread 1 of 5
 $ cd lib
 $ git clone https://github.com/01org/tbb.git
 $ cd tbb
-$ unalias make
+$ unalias make (ignore if dotcshrc not sourced, no harm even if executed)
 $ make
 $ ln -s build/linux_intel64_gcc_cc<version>_libc<version>_kernel<version>_release/ lib
 `
