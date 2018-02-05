@@ -4,7 +4,7 @@
 
 ## WHY
 
-* While the `LRQA`s that you have been performing with perseverence
+* While the `LRQA`s that you have been performing with perseverance
   help lay the intellectual foundation for a determined and dedicated student of CS_4230
   - **L**ectures 
   - **R**eadings
