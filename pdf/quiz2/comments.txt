@@ -1,0 +1,34 @@
+
+Grader: Ganesh:
+
+Overall comments:
+*  Good answers!
+
+Points Awarded: 98%
+
+---
+
+Mem Models, 1: It also specifies the "visibility rules" for read values
+    with respect to all the writes. That is really what a mem model
+    defines.
+
+Mem Models, 2: Good. Sync is the essence.
+
+Mem Models, 3: Good description. SC won't give 0,0
+
+Mem Models, 4: Good summary of HB
+
+
+Dat Dep Analysis, Q1: Good definitions 
+
+Dat Dep Analysis, Q2: Good description of dependency removal
+
+
+OMP, Q1: Correct!
+
+OMP, Q2: Great job
+
+
+---
+
+    
