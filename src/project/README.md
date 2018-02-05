@@ -114,9 +114,9 @@
 * After their presentation, the students also submit  full report on their final project.
 
 
+## WHERE
 
-
-
+`CS_4230/src/project`
 
 
 
