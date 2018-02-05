@@ -4,6 +4,23 @@
 
 There is a button on this page that says `Fork`
 Please fork this repository and add your work into that.
+Just forking is not enough, Please follow instructions in [here](https://about.gitlab.com/2016/12/01/how-to-keep-your-fork-up-to-date-with-its-origin/)
+to keep up to date with the CS_4230 Class Repository.
+
+## Grading
+
+The graders will ideally like to do only the following to compile and run you submission for the grading.
+Please ensure that the make commands you use or any python or other scripts that you might
+have developed are addeded into your grade.sh
+
+```
+$ source dotcshrc 
+$ ./utils/grade.sh <1/2/3/4/5..>
+```
+
+A utils directory is added containing a base, sample grade script
+
+
 
 ## Important Links
 
