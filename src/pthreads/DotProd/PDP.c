@@ -13,6 +13,8 @@ int Exp, Thres;
 typedef struct {
   int L;
   int H;
+  int result;
+  int numThreads;
 } RNG;
 
 
@@ -24,11 +26,6 @@ float result;
 
 // lock for the shared variable nextbase
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-
-// ID structs for the threads
-pthread_t id[MAX_THREADS];
-
-int tid = 0;
 
 void Usage(char *prog_name) {
    fprintf(stderr, "usage: %s <Exp>:int <Thres>:int\n", prog_name);
@@ -44,23 +41,30 @@ void Get_args(int argc, char **argv) {
    if (Thres < 1 || Thres >= (int) pow(2, Exp)) Usage(argv[0]);
 }  
 
-void serdp(RNG rng) 
+int serdp(RNG rng) 
 {
+  int result = 0;
+
   for(int i=rng.L; i<=rng.H; ++i)
   {
     C[i] = A[i] * B[i];
+    result += C[i];
   }
+
+  return result;
 }
 
 void* pdp(void* myrng) 
 {
+  RNG *prng = (RNG*)myrng;
   RNG rng = *(RNG*)myrng;
-  // variables to join threads after they have been created
-  int k,j;
 
-  if ((rng.H - rng.L) <= Thres) 
+  // variables to join threads after they have been created
+  pthread_t tid[2];
+
+  if ((rng.H - rng.L) + 1 < Thres) 
   {
-    serdp(rng);
+    prng->result = serdp(rng);
   }
   else 
   {
@@ -74,102 +78,98 @@ void* pdp(void* myrng)
 
     // critical section. create a thread then increment the thread id
     // set the variable to join the thread after it is created.
-    pthread_mutex_lock(&mutex);
-    k = tid + 1;
-    printf("--> creating thread for range %d %d\n", rngL.L, rngL.H);
-    pthread_create(&id[tid++], NULL, &pdp, (void*)&rngL);
-    pthread_mutex_unlock(&mutex);
+    // printf("--> creating thread for range %d %d\n", rngL.L, rngL.H);
+    pthread_create(&tid[0], NULL, &pdp, (void*)&rngL);
     
     // critical section. create a thread then increment the thread id
     // set the variable to join the thread after it is created.
-    pthread_mutex_lock(&mutex);
-    j = tid + 1;
-    printf("--> creating thread for range %d %d\n", rngH.L, rngH.H);    
-    pthread_create(&id[tid++], NULL, &pdp, (void*)&rngH);
-    pthread_mutex_unlock(&mutex);
+    // printf("--> creating thread for range %d %d\n", rngH.L, rngH.H);    
+    pthread_create(&tid[1], NULL, &pdp, (void*)&rngH);
 
-    // join both threads after the work has been finished
-    pthread_join(id[k], NULL);
-    pthread_join(id[j], NULL);
+    pthread_join(tid[0], NULL);
+    pthread_join(tid[1], NULL);
+
+    prng->numThreads = rngL.numThreads + rngH.numThreads + 2;
+    prng->result = rngL.result + rngH.result;
   }
 }
 
 /*
  * Driver method for doing parallel dot product
  */
-void do_pdp(RNG rng)
-{
-  printf("--> creating thread for range %d %d\n", rng.L, rng.H);
-  // set variable to join the thread after it has finished work
-  int t = tid;
+// void do_pdp(RNG rng)
+// {
+//   printf("--> creating thread for range %d %d\n", rng.L, rng.H);
+//   // set variable to join the thread after it has finished work
+//   int t = tid;
 
-  // create the thread to do the work.
-  pthread_create(&id[tid++], NULL, &pdp, (void*)&rng);
+//   // create the thread to do the work.
+//   pthread_create(&id[tid++], NULL, &pdp, (void*)&rng);
 
-  // join the thread after the calls have been made
-  pthread_join(id[t], NULL);
-}
+//   // join the thread after the calls have been made
+//   pthread_join(id[t], NULL);
+// }
 
-/*
- * Reduces the final array in parallel
- */
-void* reduce(void* rng)
-{
-  RNG myrng = *(RNG*)rng;
+// /*
+//  * Reduces the final array in parallel
+//  */
+// void* reduce(void* rng)
+// {
+//   RNG myrng = *(RNG*)rng;
 
-  // printf("--> reducing between: %d %d\n", myrng.L, myrng.H);
+//   // printf("--> reducing between: %d %d\n", myrng.L, myrng.H);
 
-  for(int i = myrng.L; i <= myrng.H;i++)
-  {
-      pthread_mutex_lock(&mutex);
-      result += C[i];
-      pthread_mutex_unlock(&mutex);
-      // printf("%f\n", C[i]);
-  }
-}
+//   for(int i = myrng.L; i <= myrng.H;i++)
+//   {
+//       pthread_mutex_lock(&mutex);
+//       result += C[i];
+//       pthread_mutex_unlock(&mutex);
+//       // printf("%f\n", C[i]);
+//   }
+// }
 
-/*
- * Driver method for doing parallel reduce
- */
-void do_reduce(RNG rng, int reduction)
-{
-  RNG *splits = (RNG*)malloc(sizeof(RNG) * reduction);
+// /*
+//  * Driver method for doing parallel reduce
+//  */
+// void do_reduce(RNG rng, int reduction)
+// {
+//   RNG *splits = (RNG*)malloc(sizeof(RNG) * reduction);
 
-  // set up the initial work
-  RNG work;
-  work.L = rng.L;
-  work.H = rng.H / reduction;
-  splits[0] = work;
+//   // set up the initial work
+//   RNG work;
+//   work.L = rng.L;
+//   work.H = rng.H / reduction;
+//   splits[0] = work;
 
-  int mult = 2;
+//   int mult = 2;
 
-  for(int i = 1; i < reduction; ++i)
-  {
-    printf("--> reducing between: %d %d\n", work.L, work.H);
+//   for(int i = 1; i < reduction; ++i)
+//   {
+//     printf("--> reducing between: %d %d\n", work.L, work.H);
     
-    work.L = work.H + 1;
-    work.H = ((Size) / reduction) * mult;
+//     work.L = work.H + 1;
+//     work.H = ((Size) / reduction) * mult;
 
-    if(work.H >= (Size-1))
-    {
-      work.H = Size - 1;
-    }
+//     if(work.H >= (Size-1))
+//     {
+//       work.H = Size - 1;
+//     }
 
-    splits[i] = work;
-  }
+//     splits[i] = work;
+//   }
   
-  for(int i = 0; i < reduction; ++i)
-  {
-    pthread_create(&id[i++], NULL, &reduce, (void*)&splits[i]);
-  }
+//   for(int i = 0; i < reduction; ++i)
+//   {
+//     pthread_create(&id[i++], NULL, &reduce, (void*)&splits[i]);
+//   }
 
-  for(int i = 0; i < tid; ++i)
-  {
-    pthread_join(id[i], NULL);
-  }
+//   for(int i = 0; i < tid; ++i)
+//   {
+//     pthread_join(id[i], NULL);
+//   }
 
-  free(splits);
-}
+//   free(splits);
+// }
 
 
 // int get_nprocs_conf(void);
@@ -202,6 +202,8 @@ int main(int argc, char **argv) {
   RNG rng;
   rng.L = 0;
   rng.H = Size-1;
+  rng.numThreads = 0;
+  rng.result = 0;
   //printf("Serial dot product is %f\n", serdp(rng));
   
   printf("Now invoking parallel dot product\n");
@@ -210,21 +212,19 @@ int main(int argc, char **argv) {
     C[i]=0;
   }
   //printf("Parallel DP = %f\n", pdp(rng));
-  do_pdp(rng);
+  result = pdp(rng);
 
   printf("Final C is\n");
-
-  tid = 0;
 
   // do_reduce(rng, 2);
   // printf("%s%f\n", "Parallel C is: ", result);
 
-  result = 0;
-  for(int i=0; i<Size; ++i) 
-  {
-    // printf("%f\n", (double) C[i]);
-    result += C[i];
-  }
+  // result = 0;
+  // for(int i=0; i<Size; ++i) 
+  // {
+  //   // printf("%f\n", (double) C[i]);
+  //   result += C[i];
+  // }
 
 
   printf("%s%f\n", "Final Result: ", result);
