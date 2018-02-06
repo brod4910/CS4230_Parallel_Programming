@@ -23,6 +23,7 @@ float *A;
 float *B;
 float *C;
 float totRes = 0;
+float presult = 0;
 
 // lock for the shared variable nextbase
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -51,6 +52,7 @@ int serdp(RNG rng)
     result += C[i];
   }
 
+  presult += result;
   return result;
 }
 
@@ -89,11 +91,11 @@ void* pdp(void* myrng)
     pthread_join(tid[0], NULL);
     pthread_join(tid[1], NULL);
 
-    if(prng == NULL)
-    {
-      exit(-1);
-    }
-    
+    // if(prng == NULL)
+    // {
+    //   exit(-1);
+    // }
+
     prng->numThreads = rngL.numThreads + rngH.numThreads + 2;
     prng->result = rngL.result + rngH.result;
   }
@@ -234,7 +236,7 @@ int main(int argc, char **argv) {
   // }
 
 
-  printf("%s%f\n", "Final Result parallel C is: ", totRes);
+  printf("%s%f\n", "Final Result parallel C is: ", presult);
 
   free(A);
   free(B);
