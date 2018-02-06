@@ -22,7 +22,7 @@ typedef struct {
 float *A;
 float *B;
 float *C;
-float result;
+float totRes = 0;
 
 // lock for the shared variable nextbase
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -89,6 +89,11 @@ void* pdp(void* myrng)
     pthread_join(tid[0], NULL);
     pthread_join(tid[1], NULL);
 
+    if(prng == NULL)
+    {
+      exit(-1);
+    }
+    
     prng->numThreads = rngL.numThreads + rngH.numThreads + 2;
     prng->result = rngL.result + rngH.result;
   }
@@ -97,18 +102,13 @@ void* pdp(void* myrng)
 /*
  * Driver method for doing parallel dot product
  */
-// void do_pdp(RNG rng)
-// {
-//   printf("--> creating thread for range %d %d\n", rng.L, rng.H);
-//   // set variable to join the thread after it has finished work
-//   int t = tid;
+void do_pdp(RNG rng)
+{
+  // set variable to join the thread after it has finished work
+  // create the thread to do the work.
+  pdp((void*)&rng);
 
-//   // create the thread to do the work.
-//   pthread_create(&id[tid++], NULL, &pdp, (void*)&rng);
-
-//   // join the thread after the calls have been made
-//   pthread_join(id[t], NULL);
-// }
+}
 
 // /*
 //  * Reduces the final array in parallel
@@ -204,6 +204,7 @@ int main(int argc, char **argv) {
   rng.H = Size-1;
   rng.numThreads = 0;
   rng.result = 0;
+  float serTot = 0;
   //printf("Serial dot product is %f\n", serdp(rng));
   
   printf("Now invoking parallel dot product\n");
@@ -212,10 +213,16 @@ int main(int argc, char **argv) {
     C[i]=0;
   }
   //printf("Parallel DP = %f\n", pdp(rng));
-  result = pdp(rng);
+  do_pdp(rng);
 
-  printf("Final C is\n");
 
+  for(int i=rng.L; i<=rng.H; ++i)
+  {
+    C[i] = A[i] * B[i];
+    serTot += C[i];
+  }
+
+  printf("Final serial C is: %f\n", serTot);
   // do_reduce(rng, 2);
   // printf("%s%f\n", "Parallel C is: ", result);
 
@@ -227,7 +234,7 @@ int main(int argc, char **argv) {
   // }
 
 
-  printf("%s%f\n", "Final Result: ", result);
+  printf("%s%f\n", "Final Result parallel C is: ", totRes);
 
   free(A);
   free(B);
