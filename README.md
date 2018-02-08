@@ -7,6 +7,36 @@ Please fork this repository and add your work into that.
 Just forking is not enough, Please follow instructions in [here](https://about.gitlab.com/2016/12/01/how-to-keep-your-fork-up-to-date-with-its-origin/)
 to keep up to date with the CS_4230 Class Repository.
 
+## Upstream
+
+* To add the class repository as one of your remote upstreams, 
+* to pull and sync with it as updates are published, just follow these simple steps.
+
+```git remote add upstream_name https://username@gitlab.com/vinutah/CS_4230.git```
+
+* Replace upstream_name with whatever name you want to use for Vinu's repo and replace username with your gitlab username.
+* Once that is done, you can pull from that repository by typing:
+
+```git pull upstream_name master```
+
+Again replace upstream_name with whatever name you chose.
+
+* And that's it, ```git``` will ask you to create a new commit for the merge, 
+* either using vi or vim. 
+* On the keyboard type :wq and then press enter to save and quit the commit message.
+
+* Do keep in mind however when you push to your own remote repo you will need to 
+* know the name of it so git knows which one to use. It is probably called origin.
+
+``git push origin master``
+
+* In these cases, ```master``` is the branch that you are attempting to push/pull to/from. 
+* It might be optional but I keep it there for verbosity.
+
+* Lastly, you can view the remote repos by typing:
+
+```git remote -v```
+
 ## Grading
 
 The graders will ideally like to do only the following to compile and run you submission for the grading.
