@@ -11,9 +11,9 @@
 
 const long MAX_EXP = 32;
 const int MAX_THREADS = 1024;
-const int THREAD_NUM = 24;
+const int DEFAULT_THREADS = 16;
 size_t Size;
-int Exp, Thres;
+int Exp, Thres, Thread_Num;
 
 typedef struct {
   size_t L;
@@ -39,18 +39,24 @@ void Usage(char *prog_name) {
 }  /* Usage */
 
 void Get_args(int argc, char **argv) {
-   if (argc != 3) Usage(argv[0]);
+   if (argc != 4) Usage(argv[0]);
    Exp = strtol(argv[1], NULL, 10);  
    if (Exp <= 0 || Exp > MAX_EXP) Usage(argv[0]);
    Thres = strtol(argv[2], NULL, 10);
    if (Thres < 1 || Thres >= (int) pow(2, Exp)) Usage(argv[0]);
+   Thread_Num = strtol(argv[3], NULL, 10);
 }  
 
-double pdp(RNG myrng) 
+double pdp(RNG myrng, int thread_c) 
 {
 	double result = 0;
 
-	#pragma omp parallel num_threads(THREAD_NUM)
+	if(thread_c == 0)
+	{
+		thread_c = DEFAULT_THREADS;
+	}
+	
+	#pragma omp parallel num_threads(thread_c)
 	{
 		double localRes = 0;
 
@@ -66,6 +72,39 @@ double pdp(RNG myrng)
 	}
 
 	return result;
+}
+
+void time_pdp(RNG myrng)
+{
+	double for_overhead, pdp_time, totDuration;
+	clock_t startTime;
+
+	printf("%s\n", "Power of Two\tThread Size\tTime(msec)");
+
+	for(int i = 1; i <= Thread_Num;i++)
+	{
+		startTime = clock();
+		for(int j = 0; j < 100; j++)
+		{
+
+		}
+		for_overhead = (clock() - startTime) / (double)CLOCKS_PER_SEC;
+
+		for(int j = 0; j < 100;j++)
+		{
+			startTime = clock();
+			pdp(myrng, i);
+			pdp_time += (clock() - startTime) / (double)CLOCKS_PER_SEC;
+		}
+
+		pdp_time /= 100;
+
+		totDuration = pdp_time - for_overhead;
+
+		printf("%d\t\t%d\t\t%lf\n", Exp, i, totDuration);
+
+		pdp_time = for_overhead = 0;
+	}
 }
 
 int main(int argc, char **argv) 
@@ -101,7 +140,7 @@ int main(int argc, char **argv)
     C[i]=0;
   }
   //printf("Parallel DP = %f\n", pdp(rng));
-  presult = pdp(rng);
+  presult = pdp(rng, 0);
 
 
   for(size_t i=rng.L; i<=rng.H; ++i)
@@ -113,6 +152,8 @@ int main(int argc, char **argv)
   printf("%s%f\n", "Final Result parallel C is: ", presult);
 
   printf("Final serial C is: %f\n", serTot);
+
+  time_pdp(rng);
 
 
   free(A);
