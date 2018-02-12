@@ -58,17 +58,18 @@ double pdp(RNG myrng, int thread_c)
 
 	#pragma omp parallel num_threads(thread_c)
 	{
-		double localRes = 0;
+		// double localRes = 0;
 
-		#pragma omp for schedule(dynamic, Thres)
+		#pragma omp for schedule(dynamic, Thres) \
+		reduction(+:result)
 		for(size_t i = myrng.L; i <= myrng.H;i++)
 		{
 			C[i] = A[i] * B[i];
-			localRes += C[i];
+			result += C[i];
 		}
 
-		#pragma omp atomic
-		result += localRes;
+		// #pragma omp atomic
+		// result += localRes;
 	}
 
 	return result;

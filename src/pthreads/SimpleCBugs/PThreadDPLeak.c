@@ -32,8 +32,6 @@ int main(int argc, char **argv) {
     C[i]=0;
   }
   printf("Parallel DP = %d\n",pdp(A,B,C,0,Size));
-
-  return 0;
 }
 
 int serdp(int *A, int *B, int L, int H) {

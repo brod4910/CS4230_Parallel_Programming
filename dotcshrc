@@ -1,3 +1,18 @@
 #!/usr/bin/bash
 export CS_4230_HOME=$HOME/CS_4230
 export CS_4230_INCLUDE="$CS_4230_HOME/include/"
+alias make='make -f $HOME/CS_4230/Makefile'
+echo " "
+echo "---------------------------------------------"
+echo "    Welcome to CS_4230 Class Repository"
+echo "---------------------------------------------"
+echo "1. Environment variables set "
+echo "   CS_4230_HOME    :" $CS_4230_HOME
+echo "   CS_4230_INCLUDE :" $CS_4230_INCLUDE
+echo " "
+echo " "
+echo "2. gnu make aliased to use our master Makefile"
+echo "   alias make='make -f $HOME/CS_4230/Makefile'"
+echo "   Please unalias to build other codes.       "
+echo "--------------------------------------------- "
+echo " "

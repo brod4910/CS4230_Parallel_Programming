@@ -1,0 +1,6 @@
+*.decompile
+*.exe
+*.lst
+.lst
+*.swp
+.*.swp

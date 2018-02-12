@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <timer.h>
-
 int A[16384][16384]; //show nonlocal
 int main(){
   double start, finish, elapsed;
@@ -12,6 +11,5 @@ int main(){
   GET_TIME(finish);
   elapsed = finish - start;
   printf("The elapsed time is %e seconds\n", elapsed);  
-  return 0;
 }
 
