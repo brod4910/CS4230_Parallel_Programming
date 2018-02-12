@@ -55,7 +55,7 @@ double pdp(RNG myrng, int thread_c)
 	{
 		thread_c = DEFAULT_THREADS;
 	}
-	
+
 	#pragma omp parallel num_threads(thread_c)
 	{
 		double localRes = 0;
