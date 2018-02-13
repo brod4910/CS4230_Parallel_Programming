@@ -35,7 +35,7 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 void Usage(char *prog_name) {
    fprintf(stderr, "usage: %s <Exp>:int <Thres>:int\n", prog_name);
    fprintf(stderr, "Ensure that Thres <= pow(2, Exp)\n");
-   fprintf(stderr, "Ensure that you input a thread number");
+   fprintf(stderr, "Ensure that you input a thread number\n");
    exit(0);
 }  /* Usage */
 
@@ -78,13 +78,15 @@ double pdp(RNG myrng, int thread_c)
 
 void time_pdp(RNG myrng)
 {
-	double for_overhead, pdp_time, totDuration;
+	double for_overhead, pdp_time, totDuration, pow_overhead;
+  int pow_count = 1;
 	clock_t startTime;
 
-	printf("%s\n", "Power of Two\tThread Size\tTime(msec)");
 
-	for(int i = 1; i <= Thread_Num;i++)
-	{
+  for(int i = 1; i <= Thread_Num;i++)
+  {
+  	printf("%s\n", "Power of Two\tThread Size\tTime(msec)");
+
 		startTime = clock();
 		for(int j = 0; j < 100; j++)
 		{
@@ -92,20 +94,34 @@ void time_pdp(RNG myrng)
 		}
 		for_overhead = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-		for(int j = 0; j < 100;j++)
-		{
-			startTime = clock();
-			pdp(myrng, i);
-			pdp_time += (clock() - startTime) / (double)CLOCKS_PER_SEC;
-		}
+    startTime = clock();
+    for(int j = 2; j <= pow(2, 20); j = pow(2, pow_count))
+    {
+      pow_count++;
+    }
+    pow_overhead = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-		pdp_time /= 100;
+    pow_count = 1;
 
-		totDuration = pdp_time - for_overhead;
+    for(int k = 2; k <= pow(2,20); k = pow(2, pow_count))
+    {
+      Thres = k;
+  		for(int j = 0; j < 100;j++)
+  		{
+  			startTime = clock();
+  			pdp(myrng, i);
+  			pdp_time += (clock() - startTime) / (double)CLOCKS_PER_SEC;
+  		}
 
-		printf("%d\t\t%d\t\t%lf\n", Exp, i, totDuration);
+  		pdp_time /= 100;
 
-		pdp_time = for_overhead = 0;
+  		totDuration = pdp_time - (for_overhead + pow_overhead);
+
+  		printf("%d\t\t%d\t\t%lf\n", pow_count, i, totDuration);
+
+  		pdp_time = for_overhead = 0;
+      pow_count++;
+    }
 	}
 }
 
