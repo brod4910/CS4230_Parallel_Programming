@@ -105,7 +105,6 @@ void time_pdp(RNG myrng)
 	Thres = 8;
     for(int k = 8; k <= pow(2,Exp); k = pow(2, pow_count))
     {
-    	
   		for(int j = 0; j < 100;j++)
   		{
   			startTime = clock();
@@ -117,11 +116,11 @@ void time_pdp(RNG myrng)
 
   		totDuration = pdp_time - (for_overhead + pow_overhead);
 
-  		printf("%d,%d,%lf\n", pow_count, i, totDuration);
+  		printf("%d,%d,%f\n", pow_count, i, totDuration);
 
   		pdp_time = 0;
 	    pow_count++;
-	    
+
     	if(Thres <= pow(2,8))
     	{
 	    	Thres += k;
