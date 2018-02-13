@@ -105,10 +105,6 @@ void time_pdp(RNG myrng)
 	Thres = 8;
     for(int k = 8; k <= pow(2,Exp); k = pow(2, pow_count))
     {
-    	if(Thres <= pow(2,8))
-    	{
-	    	Thres += k;
-    	}
     	
   		for(int j = 0; j < 100;j++)
   		{
@@ -125,6 +121,11 @@ void time_pdp(RNG myrng)
 
   		pdp_time = 0;
 	    pow_count++;
+	    
+    	if(Thres <= pow(2,8))
+    	{
+	    	Thres += k;
+    	}
     }
 
     for_overhead = pow_overhead = 0;
