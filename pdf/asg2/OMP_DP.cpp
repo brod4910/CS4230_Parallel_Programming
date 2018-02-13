@@ -84,7 +84,7 @@ void time_pdp(RNG myrng)
 
   for(int i = 1; i <= Thread_Num;i++)
   {
-  	printf("%s\n", "Power of Two\tThread Size\tTime(msec)");
+  	printf("%s\n", "Threshold,Thread Size,Time(msec)");
 
 		startTime = clock();
 		for(int j = 0; j < 100; j++)
@@ -116,7 +116,7 @@ void time_pdp(RNG myrng)
 
   		totDuration = pdp_time - (for_overhead + pow_overhead);
 
-  		printf("%d\t\t%d\t\t%lf\n", pow_count, i, totDuration);
+  		printf("%d,%d,%lf\n", pow_count, i, totDuration);
 
   		pdp_time = 0;
       pow_count++;
