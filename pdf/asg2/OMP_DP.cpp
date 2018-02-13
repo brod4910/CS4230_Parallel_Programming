@@ -78,8 +78,8 @@ double pdp(RNG myrng, int thread_c)
 
 void time_pdp(RNG myrng)
 {
-	double for_overhead, pdp_time, totDuration, pow_overhead;
-  int pow_count = 1;
+  double for_overhead, pdp_time, totDuration, pow_overhead;
+  int pow_count = 3;
 	clock_t startTime;
 
   for(int i = 1; i <= Thread_Num;i++)
@@ -94,17 +94,22 @@ void time_pdp(RNG myrng)
 		for_overhead = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
     startTime = clock();
-    for(int j = 2; j <= pow(2, Exp); j = pow(2, pow_count))
+    for(int j = 8; j <= pow(2, Exp); j = pow(2, pow_count))
     {
       pow_count++;
     }
     pow_overhead = (clock() - startTime) / (double)CLOCKS_PER_SEC;
 
-    pow_count = 1;
+    pow_count = 3;
 
-    for(int k = 2; k <= pow(2,Exp); k = pow(2, pow_count))
+	Thres = 8;
+    for(int k = 8; k <= pow(2,Exp); k = pow(2, pow_count))
     {
-      Thres = k;
+    	if(Thres <= pow(2,8))
+    	{
+	    	Thres += k;
+    	}
+    	
   		for(int j = 0; j < 100;j++)
   		{
   			startTime = clock();
@@ -119,7 +124,7 @@ void time_pdp(RNG myrng)
   		printf("%d,%d,%lf\n", pow_count, i, totDuration);
 
   		pdp_time = 0;
-      pow_count++;
+	    pow_count++;
     }
 
     for_overhead = pow_overhead = 0;
