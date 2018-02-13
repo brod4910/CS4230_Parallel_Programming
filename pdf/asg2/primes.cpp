@@ -13,22 +13,11 @@ size_t primes_range = 0;
 int chunk_size = 10;
 int parallel_method;
 
-struct Primes
-{
-	void operator()(const tbb::blocked_range<size_t>& range) const
-	{
-		for(size_t i = range.begin(); i != range.end(); i+=2)
-		{
-
-		}
-	}
-};
-
 void Usage(char *prog_name, int printCase) 
 {
 	if(printCase == 0)
 	{
-		fprintf(stderr, "Not Enough arugments. Thread count, primes range and chunk size are required\n");	
+		fprintf(stderr, "Not Enough arugments. Thread count and primes range are required\n");	
 	}
 
 	exit(0);
@@ -48,7 +37,7 @@ void Get_args(int argc, char **argv)
 
 void primes_array()
 {
-	int *sols = new int[thread_count] ();
+	int *sols = new int[primes_range + 1] ();
 
 	#pragma omp parallel for num_threads(thread_count) schedule(dynamic, chunk_size)
 		// reduction(+:numPrimes, numP41, numP43)
@@ -74,19 +63,15 @@ void primes_array()
 		if(prime)
 		{
 			#pragma omp critical
-			sols[tid] = 1;
+			sols[i] = 1;
 		}
 	}
 
-	for(int i = 0; i < thread_count;i++)
+	for(size_t i = 0; i <= primes_range;i++)
 	{
 		if(sols[i] == 1)
 		{
-			cout << "Thread number " << i << " found a prime" << endl;
-		}
-		else
-		{
-			cout << "Thread number " << i << " did not find a prime" << endl;
+			cout << "Prime number found: " << i << endl;
 		}
 	}
 
@@ -96,13 +81,43 @@ void primes_array()
 void primes_concurrent_vector()
 {
 	tbb::concurrent_vector<int> primes;
-	Primes prime;
-	tbb::parallel_for(tbb::blocked_range<size_t>(size_t(3), primes_range),  prime);
+
+	#pragma omp parallel for num_threads(thread_count) schedule(dynamic, chunk_size)
+		// reduction(+:numPrimes, numP41, numP43)
+	for(size_t i = 3; i <= primes_range; i += 2)
+	{
+		int limit, prime, tid;
+
+		tid = omp_get_thread_num();
+		limit = (int)sqrt((float)i) + 1;
+		prime = 1; // assume number is prime
+		int j = 3;
+
+		while(prime && (j <= limit))
+		{
+			if(i % j == 0)
+			{
+				prime = 0;
+			}
+
+			j += 2;
+		}
+
+		if(prime)
+		{
+			primes.push_back(i);
+		}
+	}
+
+	for(int i: primes)
+	{
+		cout << "Prime number found: " << i << endl;
+	}
 }
 
 void primes_boolean_vector()
 {
-	vector<bool> primes(thread_count);
+	vector<bool> primes(primes_range + 1);
 
 	#pragma omp parallel for num_threads(thread_count) schedule(dynamic, chunk_size)
 	// reduction(+:numPrimes, numP41, numP43)
@@ -132,15 +147,11 @@ void primes_boolean_vector()
 		}
 	}
 
-	for(int i = 0; i < thread_count;i++)
+	for(size_t i = 0; i <= primes_range;i++)
 	{
 		if(primes.at(i))
 		{
-			cout << "Thread number " << i << " found a prime" << endl;
-		}
-		else
-		{
-			cout << "Thread number " << i << " did not find a prime" << endl;
+			cout << "Prime number found: " << i << endl;
 		}
 	}	
 }

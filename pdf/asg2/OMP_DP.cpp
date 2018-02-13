@@ -35,6 +35,7 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 void Usage(char *prog_name) {
    fprintf(stderr, "usage: %s <Exp>:int <Thres>:int\n", prog_name);
    fprintf(stderr, "Ensure that Thres <= pow(2, Exp)\n");
+   fprintf(stderr, "Ensure that you input a thread number");
    exit(0);
 }  /* Usage */
 

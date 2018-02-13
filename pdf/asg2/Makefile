@@ -10,3 +10,12 @@ primes: primes.cpp
 
 dotprod: OMP_DP.cpp
 	$(CXX) $(CPPFLAGS) $(WAR) $^ -o $@ $(LDFLAGS)
+
+clean:
+	@echo " "
+	@echo "Cleaning..."
+	@echo " "
+	rm -rf *.exe *.o *.lst *.decompile *.txt .lst *.out dotprod primes
+	@echo " "
+	@echo "Done."
+	@echo " "
