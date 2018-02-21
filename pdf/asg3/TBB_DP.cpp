@@ -81,6 +81,7 @@ void pdp(RNG myrng, double* A, double* B, int i)
   }
   else 
   {
+    int nthr = tbb::task_scheduler_init::default_num_threads();
     tbb::task_scheduler_init init(i);
   }
 
