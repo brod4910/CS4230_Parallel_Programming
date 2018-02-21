@@ -1,0 +1,108 @@
+Merge Sort:
+	Random dist:
+
+	Total duration for 1 threads was: 0.0990175
+	Total duration for 2 threads was: 0.0502988
+	Total duration for 3 threads was: 0.0322906
+	Total duration for 4 threads was: 0.0246795
+	Total duration for 5 threads was: 0.0221074
+	Total duration for 6 threads was: 0.0199726
+	Total duration for 7 threads was: 0.018502
+	Total duration for 8 threads was: 0.0180056
+	Total duration for 9 threads was: 0.0181488
+	Total duration for 10 threads was: 0.0179096
+	Total duration for 11 threads was: 0.017911
+	Total duration for 12 threads was: 0.0179092
+	Total duration for 13 threads was: 0.0179578
+	Total duration for 14 threads was: 0.0179693
+	Total duration for 15 threads was: 0.017959
+	Total duration for 16 threads was: 0.0180094
+	Total duration for 17 threads was: 0.0179863
+	Total duration for 18 threads was: 0.0179943
+	Total duration for 19 threads was: 0.0180153
+	Total duration for 20 threads was: 0.0180378
+	Total duration for 21 threads was: 0.0181471
+	Total duration for 22 threads was: 0.0181326
+	Total duration for 23 threads was: 0.018099
+	Total duration for 24 threads was: 0.0182358
+
+	Sorted Dist:
+
+	Total duration for 1 threads was: 0.00972396
+	Total duration for 2 threads was: 0.00546591
+	Total duration for 3 threads was: 0.00422104
+	Total duration for 4 threads was: 0.00388008
+	Total duration for 5 threads was: 0.0037739
+	Total duration for 6 threads was: 0.00377142
+	Total duration for 7 threads was: 0.00378828
+	Total duration for 8 threads was: 0.00384768
+	Total duration for 9 threads was: 0.00380145
+	Total duration for 10 threads was: 0.00385309
+	Total duration for 11 threads was: 0.00390513
+	Total duration for 12 threads was: 0.00385197
+	Total duration for 13 threads was: 0.00383381
+	Total duration for 14 threads was: 0.00386771
+	Total duration for 15 threads was: 0.00385656
+	Total duration for 16 threads was: 0.00387164
+	Total duration for 17 threads was: 0.0038849
+	Total duration for 18 threads was: 0.00387626
+	Total duration for 19 threads was: 0.00397697
+	Total duration for 20 threads was: 0.00387707
+	Total duration for 21 threads was: 0.00387966
+	Total duration for 22 threads was: 0.00391112
+	Total duration for 23 threads was: 0.00394669
+	Total duration for 24 threads was: 0.00395331
+
+Quicksort:
+
+	Random Dist:
+	ASize = 2000000, nThr = 1, T = 0.169007
+	ASize = 2000000, nThr = 2, T = 0.083175
+	ASize = 2000000, nThr = 3, T = 0.058156
+	ASize = 2000000, nThr = 4, T = 0.051002
+	ASize = 2000000, nThr = 5, T = 0.040598
+	ASize = 2000000, nThr = 6, T = 0.037924
+	ASize = 2000000, nThr = 7, T = 0.037386
+	ASize = 2000000, nThr = 8, T = 0.038253
+	ASize = 2000000, nThr = 9, T = 0.033587
+	ASize = 2000000, nThr = 10, T = 0.033466
+	ASize = 2000000, nThr = 11, T = 0.034799
+	ASize = 2000000, nThr = 12, T = 0.036807
+	ASize = 2000000, nThr = 13, T = 0.037817
+	ASize = 2000000, nThr = 14, T = 0.038807
+	ASize = 2000000, nThr = 15, T = 0.036592
+	ASize = 2000000, nThr = 16, T = 0.036605
+	ASize = 2000000, nThr = 17, T = 0.03369
+	ASize = 2000000, nThr = 18, T = 0.035833
+	ASize = 2000000, nThr = 19, T = 0.033348
+	ASize = 2000000, nThr = 20, T = 0.036163
+	ASize = 2000000, nThr = 21, T = 0.040969
+	ASize = 2000000, nThr = 22, T = 0.035422
+	ASize = 2000000, nThr = 23, T = 0.037891
+	ASize = 2000000, nThr = 24, T = 0.036011
+
+	Sorted Dist:
+	ASize = 2000000, nThr = 1, T = 0.032781
+	ASize = 2000000, nThr = 2, T = 0.017648
+	ASize = 2000000, nThr = 3, T = 0.014328
+	ASize = 2000000, nThr = 4, T = 0.011832
+	ASize = 2000000, nThr = 5, T = 0.010357
+	ASize = 2000000, nThr = 6, T = 0.00981
+	ASize = 2000000, nThr = 7, T = 0.009485
+	ASize = 2000000, nThr = 8, T = 0.008912
+	ASize = 2000000, nThr = 9, T = 0.008808
+	ASize = 2000000, nThr = 10, T = 0.008839
+	ASize = 2000000, nThr = 11, T = 0.00922
+	ASize = 2000000, nThr = 12, T = 0.008794
+	ASize = 2000000, nThr = 13, T = 0.00891
+	ASize = 2000000, nThr = 14, T = 0.008848
+	ASize = 2000000, nThr = 15, T = 0.008649
+	ASize = 2000000, nThr = 16, T = 0.008905
+	ASize = 2000000, nThr = 17, T = 0.009405
+	ASize = 2000000, nThr = 18, T = 0.009814
+	ASize = 2000000, nThr = 19, T = 0.009436
+	ASize = 2000000, nThr = 20, T = 0.009268
+	ASize = 2000000, nThr = 21, T = 0.008859
+	ASize = 2000000, nThr = 22, T = 0.008965
+	ASize = 2000000, nThr = 23, T = 0.008836
+	ASize = 2000000, nThr = 24, T = 0.010949
