@@ -1,0 +1,87 @@
+
+
+Grader: Ganesh
+
+Points: 95
+
+Q1: DCL in Java:
+
+    To the compilers dismay or the users'?
+
+    You say "all these alternatives did not work".
+    What are the reasons for the failures? Would have
+    been nice to at least list one.
+
+    O/w a good summary.
+    
+Q2: Sync-with:
+
+    There are many interesting details presented in the
+    readings on sync-with.
+
+
+Q3: DCL in C++:
+
+    "When C++ got a new memory model" sounds a little
+    awkward. They defined a new memory model (which then
+    implies that compilers must adjust to this model).
+
+    O/w OK
+
+Q4: Acq/Rel order:
+
+    OK details expressed. I hope you do understand
+    the memory model related operations well.       
+
+Q5: Ruud : Atomics, CAS, server sizes;
+    Mattson's summary of CAS for OMP atomics:
+
+    Good capture of the role played by CAS in realizing
+    atomics. Good insights into the cost of data movement
+    as the scale goes up.
+
+Q6: False sharing, placement hints, profiling,
+    dependence, cache blocking, scaling at high end:
+
+    You captured the speaker's gist quite well.
+    Data placement of this nature is a lot of pain.
+    I think TBB is mindful of thread affinity and
+    seems to not need such manual steps for locality.
+    However, one must perform a well-designed comparative study.
+
+Q7: OMP scoping of vars:
+
+    It was index j indeed. This has to be made private
+    to prevent races. There was an unfortunate typo in
+    his video. You got the ideas right.
+
+Q8: OMP tasking:
+
+    There are many good points in your answer.
+    Bsically, tasks are work items that can
+    be programmatically created, and associated
+    with threads based on various policies.
+    In fact, the author of TBB wishes that it
+    were called "tasking building blocks" and
+    not threading building blocks (as TBB is almost
+    entirely task-based)
+
+Q9: OMP implementation, outlining, reduction:
+
+    Good insights by reading that presentation.
+
+Q10: OMP and TBB; differences; your preference:
+
+     Some differences are pointed out. Please
+     check the discussions to gather more differences.
+
+     Specific differences have not been pointed out
+     in enough detail.
+
+Q11: Project background, motivation, application-level
+     objectives, impact, main features
+
+     Looking forward to this.
+
+--
+
