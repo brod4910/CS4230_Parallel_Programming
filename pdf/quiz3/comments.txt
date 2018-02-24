@@ -1,0 +1,32 @@
+
+Grader: Ganesh
+
+Points: 90
+
+
+Q1-2: That is a bit too soon (6-8 iterations?!). Good you tried.
+
+Q3: OK
+
+Q4: OK
+    
+Q5-9: Good summary
+
+Q10: Good, the sequential reading is indeed guaranteed by
+     race-freedom
+
+Q11: The overall goal is perf increase, but how does
+     interchange help? When is it used?
+
+Q12: Scanty on details here. Would be nice to see Hill's
+     proposal for enhanced efficiency explained.
+     
+Q13-18: Good summary
+	
+Q19: Good
+     
+Q20: One of the key aspects of Halide is its ability to
+     resynthesize a user-expressed schedule. 
+
+
+--
