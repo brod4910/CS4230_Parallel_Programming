@@ -65,34 +65,56 @@ void Get_args(int argc, char **argv) {
    Thres = strtol(argv[2], NULL, 10);
    if (Thres < 1 || Thres >= (int) pow(2, Exp)) Usage(argv[0]);
    Thread_Num = strtol(argv[3], NULL, 10);
-}  
+}
 
-void pdp(RNG myrng, double* A, double* B, int i) 
+int serdp(RNG rng) 
 {
+  int result = 0;
+
+  for(int i=rng.L; i<=rng.H; ++i)
+  {
+    C[i] = A[i] * B[i];
+    result += C[i];
+  }
+
+  presult += result;
+  return result;
+}
+
+void pdp(RNG myrng) 
+{
+  RNG *prng = &myrng;
+
+  if((myrng.H - myrng.L) + 1 < Thres)
+  {
+    prng->result = serdp(myrng);
+  }
+  else
+  {
+    RNG rngL = myrng;
+    RNG rngH = myrng;
+    
+    rngL.H = myrng.L + (myrng.H - myrng.L)/2;
+    rngH.L = rngL.H+1;
+
+    tbb::parallel_invoke( [=]{pdp(rngL);}, 
+                          [=]{pdp(rngH);}
+                          );
+  }
+}
+
+void time_pdp(RNG myrng)
+{
+  double for_overhead, pdp_time, totDuration, pow_overhead;
+	clock_t startTime;
+  int nthr = tbb::task_scheduler_init::default_num_threads();
+  int pow_count = 3;
+
   PDP pdp_res;
   pdp_res.A = A;
   pdp_res.B = B;
   pdp_res.output = C;
 
-  if(i == 0)
-  {
-    int nthr = tbb::task_scheduler_init::default_num_threads();
-    tbb::task_scheduler_init init(nthr);
-  }
-  else 
-  {
-    int nthr = tbb::task_scheduler_init::default_num_threads();
-    tbb::task_scheduler_init init(i);
-  }
-
-  tbb::parallel_for(tbb::blocked_range<int>(myrng.L, myrng.H + 1), pdp_res);
-}
-
-void time_pdp(RNG myrng)
-{
-  double for_overhead, pdp_time, totDuration;
-	clock_t startTime;
-  int nthr = tbb::task_scheduler_init::default_num_threads();
 
   for(int i = 1; i <= Thread_Num;i++)
   {
@@ -107,29 +129,51 @@ void time_pdp(RNG myrng)
     t1 = tbb::tick_count::now();
     for_overhead = (t1-t0).seconds();
 
-    // tbb::task_scheduler_init init(i);
-
-		for(int j = 0; j < 100;j++)
-		{
-      t0 = tbb::tick_count::now();
-			pdp(myrng, A, B, i);
-      t1 = tbb::tick_count::now();
-      pdp_time += (t1-t0).seconds();
-		}
-
-		pdp_time /= 100;
-
-		totDuration = pdp_time - for_overhead;
-
-    for(int i = myrng.L; i <= myrng.H; i++)
+    t0 = tbb::tick_count::now();
+    for(int j = 8; j <= pow(2, Exp); j = pow(2, pow_count))
     {
-      presult += C[i];
+      pow_count++;
     }
+    t1 = tbb::tick_count::now();
+    pow_overhead = (t1-t0).seconds();
 
-    std::cout << "PSize = " << pow(2, Exp) << ", nThr = " 
-    << i << ", DP = " << presult <<", T = " << totDuration << std::endl;
+    pow_count = 3;
 
-    for_overhead = pdp_time = 0;
+    tbb::task_scheduler_init init(i);
+    // tbb::task_arena limited_arena(i);
+    // tbb::task_group tg;
+  
+    for(size_t k = 8; k <= pow(2,Exp); k = pow(2, pow_count))
+    {  
+      myrng.H = k - 1;  
+  		for(int j = 0; j < 100;j++)
+  		{
+        t0 = tbb::tick_count::now();
+        tbb::parallel_for(tbb::blocked_range<int>(myrng.L, myrng.H + 1), pdp_res);
+        // limited_arena.execute([&](){
+        //           tg.run([&](){ 
+        //               tbb::parallel_for(tbb::blocked_range<int>(myrng.L, myrng.H + 1), pdp_res);});
+        //           });
+        t1 = tbb::tick_count::now();
+        pdp_time += (t1-t0).seconds();
+  		}
+
+  		pdp_time /= 100;
+
+  		totDuration = pdp_time - (for_overhead + pow_overhead);
+
+      for(int i = myrng.L; i <= myrng.H; i++)
+      {
+        presult += C[i];
+      }
+
+      std::cout << "PSize = " << pow(2, pow_count) << ", nThr = " 
+      << 8 << ", DP = " << presult <<", T = " << totDuration << std::endl;
+
+      for_overhead = pdp_time = presult =0;
+      pow_count++;
+      PDP pdp_res;
+    }
   }
 }
 
@@ -165,9 +209,15 @@ int main(int argc, char **argv)
   for(size_t i=0; i<Size; ++i) {
     C[i]=0;
   }
+
+  PDP pdp_res;
+  pdp_res.A = A;
+  pdp_res.B = B;
+  pdp_res.output = C;
+
   //printf("Parallel DP = %f\n", pdp(rng));
 
-  pdp(rng, A, B, 0);
+  tbb::parallel_for(tbb::blocked_range<int>(rng.L, rng.H + 1), pdp_res);
 
   for(size_t i = rng.L; i <= rng.H;i++)
   {

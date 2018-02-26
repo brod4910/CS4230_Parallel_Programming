@@ -102,7 +102,7 @@ void time_pdp(RNG myrng)
 
     pow_count = 3;
 
-	Thres = 8;
+  	Thres = 8;
     for(int k = 8; k <= pow(2,Exp); k = pow(2, pow_count))
     {
   		for(int j = 0; j < 100;j++)
