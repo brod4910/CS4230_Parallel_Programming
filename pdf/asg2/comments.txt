@@ -1,0 +1,4 @@
+
+Q2 (Grader: Saeed) (47/50)
+ - No Reduction (of DP) (using OMP) phase in the code
+ - Poor commenting

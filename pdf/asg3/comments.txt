@@ -1,0 +1,9 @@
+Q1 (Grader: Saeed) (27/35)
+  -Please clean your code and add comments before submitting
+  -You’ve been asked to run and analyze your code up to 24 threads 
+Q2 (Grader: Saeed) (5/5)
+Q3
+Q4
+Q5-a (Grader: Saeed) (4/4)
+Q5-b (Grader: Saeed) (4/4)
+Q5-c (Grader: Saeed) (4/4)
