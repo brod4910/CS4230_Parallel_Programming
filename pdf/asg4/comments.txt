@@ -14,6 +14,10 @@ Overall(Ganesh): Very well researched.
 
 90 points (lack of more details, but mainly for odd/even not being on
    	  the right example; correct me if I am wrong)
+
+You can obtain some of these points back by
+running it with the right args.
+
 	  
 	   
 
