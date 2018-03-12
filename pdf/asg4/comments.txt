@@ -1,0 +1,14 @@
+Overall(Ganesh): Very well researched.
+
+* I like the fact that you ran ISP on the trapezoidal routines.
+
+* The explanations could be a bit longer wrt the actual algorithm
+
+* The odd/even execution does not seem to be on the right example
+  (how can you achieve odd/even sorting just using collectives?)
+
+90 points (lack of more details, but mainly for odd/even not being on
+   	  the right example; correct me if I am wrong)
+	  
+	   
+
