@@ -1,0 +1,13 @@
+Overall(Ganesh): Detailed
+
+* Good that you have a handle on the resources
+
+* Good that you ran the studies on the vector sum program.
+  It is good that you summarized the logic of the program
+  including the use of the collectives.
+
+100 points.
+
+	  
+	   
+
