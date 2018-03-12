@@ -5,7 +5,12 @@ Overall(Ganesh): Very well researched.
 * The explanations could be a bit longer wrt the actual algorithm
 
 * The odd/even execution does not seem to be on the right example
-  (how can you achieve odd/even sorting just using collectives?)
+  (how can you achieve odd/even sorting just using collectives?).
+
+  I found out: you have not run it with the required args! So the
+  ispUI plot is for a null execution.
+
+  Required args are "g" and array size.
 
 90 points (lack of more details, but mainly for odd/even not being on
    	  the right example; correct me if I am wrong)
