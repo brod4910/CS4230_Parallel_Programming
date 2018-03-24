@@ -1,0 +1,8 @@
+Good summary of how workstealing works.
+
+Good description of how MPI works, including the LLNL tutorial and the
+matrix-multiply routines.
+
+100 points
+
+--

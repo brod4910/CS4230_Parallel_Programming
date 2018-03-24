@@ -1,0 +1,7 @@
+
+Good that you enjoyed the Amazon article and understood how protocols
+are verified in the extreme. I'll be presenting the SPIN model checker
+and Promela modeling language in class on Monday - plz pay attention (it
+is more of a pragmatic tool than TLA+)
+
+105 points
